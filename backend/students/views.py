@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import Student
 from .forms import StudentForm
 
@@ -16,3 +17,7 @@ def add_student(request):
     else:
         form = StudentForm()
     return render(request, 'students/add_student.html', {'form': form})
+
+# Home view to display a welcome message
+def index(request):
+    return HttpResponse("Welcome to the Students App!")

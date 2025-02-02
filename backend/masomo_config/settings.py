@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 # Define BASE_DIR for the root of the project
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Database configuration
 DATABASES = {
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'frontend/templates'],  # Path to your templates
+        'DIRS': [BASE_DIR / 'frontend' / 'templates'],  # Correct path to templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -40,6 +41,7 @@ TEMPLATES = [
     },
 ]
 
+
 # Middleware configuration
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Corrected middleware
 
 ]
+ROOT_URLCONF = 'masomo_config.urls'
 
 # Static files configuration
 STATIC_URL = '/static/'
@@ -66,3 +69,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ALLOWED_HOSTS configuration
 ALLOWED_HOSTS = ['*']  # Allow all hosts for now (this should be more restrictive in production)
+DEBUG = True
+
+print(f"BASE_DIR: {BASE_DIR}")
+SECRET_KEY = 'zh%6nkj65)qe&x02wtgh4hs=+x#4(e0a!o4h2ywj^=i4yt4-la'
+print(get_random_secret_key())
