@@ -18,9 +18,7 @@ def add_student(request):
         form = StudentForm()
     return render(request, 'students/add_student.html', {'form': form})
 
-# Home view to display a welcome message
-#ef index(request):
-    #return HttpResponse("Welcome to the Students App!")
+# c'est dans ce code que vous devez mettre creer une fonction de votre fichier htmnl ensuite creer un url lien de la fonction dans urls.py
 
 def index(request):
     return render(request, 'index.html')
