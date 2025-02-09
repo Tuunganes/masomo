@@ -24,3 +24,5 @@ def add_student(request):
 
 def index(request):
     return render(request, 'index.html')
+def gestion_view(request):
+    return render(request, 'Gestionduneecole.html')
