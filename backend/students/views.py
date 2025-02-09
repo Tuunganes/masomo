@@ -19,5 +19,8 @@ def add_student(request):
     return render(request, 'students/add_student.html', {'form': form})
 
 # Home view to display a welcome message
+#ef index(request):
+    #return HttpResponse("Welcome to the Students App!")
+
 def index(request):
-    return HttpResponse("Welcome to the Students App!")
+    return render(request, 'index.html')
