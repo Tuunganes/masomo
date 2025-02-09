@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion d'École - Tableau de Bord</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <!-- En-tête -->
+    <header>
+        <div class="logo">ÉcoleManager</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="tab-link" onclick="showSection('admin')">Espace Admin</a></li>
+                <li><a href="#" class="tab-link" onclick="showSection('professeur')">Espace Professeur</a></li>
+                <li><a href="#" class="tab-link" onclick="showSection('eleve')">Espace Élève</a></li>
+                <li><a href="#" class="tab-link" onclick="showSection('parent')">Espace Parent</a></li>
+                <li><a href="#" class="tab-link" onclick="showSection('general')">Fonctionnalités Générales</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Section principale -->
+    <main>
+
+        <!-- Espace Admin -->
+        <section id="admin" class="tab-content">
+            <h1>Tableau de Bord - Admin</h1>
+            <div class="section">
+                <h2>Gestion des Utilisateurs</h2>
+                <p>Gérer les profils des élèves, professeurs et parents (CRUD).</p>
+            </div>
+            <div class="section">
+                <h2>Création de Classes et Cours</h2>
+                <p>Créer de nouvelles classes, matières et organiser l’emploi du temps.</p>
+            </div>
+            <div class="section">
+                <h2>Gestion des Inscriptions</h2>
+                <p>Ajouter ou supprimer des inscriptions, gérer les années scolaires.</p>
+            </div>
+            <div class="section">
+                <h2>Statistiques</h2>
+                <p>Visualiser les effectifs, résultats des élèves, absences.</p>
+            </div>
+            <div class="section">
+                <h2>Ressources Financières</h2>
+                <p>Gérer les paiements, les frais de scolarité et le budget scolaire.</p>
+            </div>
+        </section>
+
+        <!-- Espace Professeur -->
+        <section id="professeur" class="tab-content">
+            <h1>Espace Professeur</h1>
+            <div class="section">
+                <h2>Saisie des Notes</h2>
+                <p>Ajouter et modifier les notes des élèves.</p>
+            </div>
+            <div class="section">
+                <h2>Gestion des Absences</h2>
+                <p>Enregistrer les absences et retards des élèves.</p>
+            </div>
+            <div class="section">
+                <h2>Partage de Ressources</h2>
+                <p>Partager des fichiers, des liens et d'autres ressources pédagogiques.</p>
+            </div>
+            <div class="section">
+                <h2>Communication avec Élèves/Parents</h2>
+                <p>Utiliser la messagerie pour communiquer avec les élèves et leurs parents.</p>
+            </div>
+        </section>
+
+        <!-- Espace Élève -->
+        <section id="eleve" class="tab-content">
+            <h1>Espace Élève</h1>
+            <div class="section">
+                <h2>Consultation des Notes</h2>
+                <p>Consulter les résultats scolaires des élèves.</p>
+            </div>
+            <div class="section">
+                <h2>Soumission des Devoirs</h2>
+                <p>Soumettre des travaux en ligne (upload de fichiers).</p>
+            </div>
+            <div class="section">
+                <h2>Accès aux Ressources</h2>
+                <p>Accéder aux fichiers pédagogiques partagés par les professeurs.</p>
+            </div>
+        </section>
+
+        <!-- Espace Parent -->
+        <section id="parent" class="tab-content">
+            <h1>Espace Parent</h1>
+            <div class="section">
+                <h2>Suivi des Résultats</h2>
+                <p>Suivi des résultats scolaires et absences de l'enfant.</p>
+            </div>
+            <div class="section">
+                <h2>Communication avec les Professeurs</h2>
+                <p>Communiquer avec les enseignants de l'élève.</p>
+            </div>
+            <div class="section">
+                <h2>Notifications</h2>
+                <p>Recevoir des notifications sur les absences ou événements importants.</p>
+            </div>
+        </section>
+
+        <!-- Fonctionnalités Générales -->
+        <section id="general" class="tab-content">
+            <h1>Fonctionnalités Générales</h1>
+            <div class="section">
+                <h2>Calendrier Interactif</h2>
+                <p>Voir les événements scolaires à venir dans un calendrier interactif.</p>
+            </div>
+            <div class="section">
+                <h2>Génération de Bulletins</h2>
+                <p>Générer des bulletins en format PDF ou Excel.</p>
+            </div>
+            <div class="section">
+                <h2>Forum/Chat en Direct</h2>
+                <p>Participer à un forum ou discuter en direct avec les autres membres.</p>
+            </div>
+            <div class="section">
+                <h2>Gestion des Événements</h2>
+                <p>Gérer les événements comme les réunions, sorties scolaires.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>&copy; 2025 ÉcoleManager - Tous droits réservés</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
