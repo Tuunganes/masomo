@@ -1,22 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>School Management</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'assets/favicon.ico' %}" type="image/x-icon">
-    
 
 </head>
 <body>
     <header>
         <h1>Bienvenue sur Masomo</h1>
         <nav>
-            <a href="/students/">Etudiants</a> | 
-            <a href="/gestion/">Gestion</a>
-
-        </nav>
+            <ul>
+              <li><a href="/students/">Etudiants</a></li>
+              <li><a href="/gestion/">Gestion</a></li>
+            </ul>
+          </nav>
+          
     </header>
     <footer>
         <p>&copy; 2025 School Management System</p>

@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion d'École - Tableau de Bord</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'assets/favicon.ico' %}" type="image/x-icon">
 
@@ -137,5 +137,6 @@
         <p>&copy; 2025 ÉcoleManager - Tous droits réservés</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+
 </body>
