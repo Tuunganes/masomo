@@ -1,19 +1,24 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Student List</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <h1>Student List</h1>
-    <ul>
-        {% for student in students %}
-            <li>{{ student.first_name }} {{ student.last_name }} - {{ student.email }}</li>
-        {% endfor %}
-    </ul>
-    <a href="/students/add/">Add New Student</a>
-</body>
-</html>
+{% block title %}Student List{% endblock %}
+{% block header_title %}Student List{% endblock %}
+
+{% block content %}
+  <ul>
+    {% for student in students %}
+      <li>
+        <a href="{% url 'students:student_detail' student.pk %}">
+          {{ student.first_name }} {{ student.last_name }}
+        </a>
+        – {{ student.email }}
+      </li>
+    {% empty %}
+      <li>No students yet.</li>
+    {% endfor %}
+  </ul>
+
+  <p>
+    <a href="{% url 'students:add_student' %}">Add New Student</a>
+  </p>
+{% endblock %}
