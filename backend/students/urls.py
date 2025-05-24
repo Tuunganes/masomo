@@ -6,4 +6,6 @@ urlpatterns = [
     path('student_list/', views.student_list, name='student_list'),  # URL for displaying all students
     path('add_student/', views.add_student, name='add_student'),  # URL for adding a new student
     path('gestion/', views.gestion_view, name='gestion'),
+    path('student/<int:pk>/',   views.student_detail, name='student_detail'),
+    path('student/<int:pk>/edit/', views.student_edit,   name='student_edit'),
 ]
