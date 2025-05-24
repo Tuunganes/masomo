@@ -12,3 +12,7 @@
     <li><strong>Registered on:</strong> {{ student.registration_date }}</li>
   </ul>
   <p>
+    <a href="{% url 'students:student_edit' student.pk %}">Edit</a> |
+    <a href="{% url 'students:student_list' %}">Back to List</a>
+  </p>
+{% endblock %}
