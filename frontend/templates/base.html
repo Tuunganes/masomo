@@ -3,18 +3,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Masomo{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="icon"        href="{% static 'assets/favicon.ico' %}" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <header>
     <h1>{% block header_title %}Bienvenue sur Masomo{% endblock %}</h1>
     <nav>
       <ul>
-        <li><a href="{% url 'students:list' %}">Étudiants</a></li>
-        <li><a href="{% url 'gestion:dashboard' %}">Gestion</a></li>
+        <!-- Use the plural 'students' namespace, not 'student' -->
+        <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
+        <li><a href="{% url 'students:gestion'       %}">Gestion</a></li>
       </ul>
     </nav>
   </header>
