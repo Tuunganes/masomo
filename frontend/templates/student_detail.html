@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student: {{ student.first_name }} {{ student.last_name }}{% endblock %}
+{% block header_title %}Student Details{% endblock %}
+
+{% block content %}
+  <h2>{{ student.first_name }} {{ student.last_name }}</h2>
+  <ul>
