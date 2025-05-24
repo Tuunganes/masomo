@@ -3,3 +3,11 @@
 
 {% block title %}Edit: {{ student.first_name }} {{ student.last_name }}{% endblock %}
 {% block header_title %}Edit Student{% endblock %}
+{% block content %}
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'students:student_detail' student.pk %}">Cancel</a>
+  </form>
+{% endblock %}
