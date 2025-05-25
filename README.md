@@ -124,14 +124,15 @@ Masomo/masomo
 │   └── templates
 │       ├── base.html
 │       ├── Gestionduneecole.html
-├──-----|---index.html
+|       |---index.html
 │       |── login.html
 │       |── student_detail.html
 │       |── student_edit.html
 │       |── student_list.html
-├── .gitignore
-├── package.json
-└── requirements.txt
+|
+├──--.gitignore
+├──--package.json
+└──--requirements.txt
 ```
 
 ## Usage
