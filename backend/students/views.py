@@ -55,10 +55,9 @@ def student_edit(request, slug):
     return render(request, 'student_edit.html', {'form': form, 'student': student})
 # c'est dans ce code que vous devez mettre creer une fonction de votre fichier htmnl ensuite creer un url lien de la fonction dans urls.py
 
-# index and gestion pages
-def index(request):
-    return render(request, 'index.html')
-
 @login_required
 def gestion_view(request):
     return render(request, 'Gestionduneecole.html')
+# index and gestion pages
+def index(request):
+    return render(request, 'index.html')

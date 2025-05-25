@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',  # Needed for messages
     #x'django.middleware.clickjacking.XContentOptionsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Corrected middleware
+    'django.middleware.csrf.CsrfViewMiddleware', # CSRF protection middleware
 
 ]
 ROOT_URLCONF = 'masomo_config.urls'
