@@ -5,10 +5,23 @@ Masomo is an open‑source game‑changing school management system designed to 
 
 ## Features (Implemented so far)
 
-* **Student CRUD**: Create, Read (List & Detail), Update student records via web forms.
-* **Shared Layout**: Centralised `base.html` for consistent header, navigation, footer, and styling.
+
+* **Student CRUD**: Create, Read (List & Detail by slug), Update, and Delete student records via web forms with confirmation prompts.
+
+* **Slug-based URLs**: Human-readable URLs like /student/alice-smith-somo/ generated automatically for each student.
+
+* **Date Picker**: Integrated django-flatpickr for selecting date of birth with DatePickerInput and validation.
+
+* **Registration Timestamp**: registration_date auto-logged via DateTimeField(auto_now_add=True).
+
+* **Shared Layout**: Centralised `base.html` for consistent header, navigation (including Login/Logout), footer, and responsive design.
+
+* **Authentication**: Login and Logout views protecting all student-management pages with @login_required.
+
 * **Responsive Design**: Flex-based layout with media queries for mobile-friendly navigation and sticky footer.
+
 * **Static Asset Management**: CSS, JavaScript, and images served via Django's staticfiles.
+
 * **SQLite Database**: Lightweight local database, migrations configured.
 
 ## Tech Stack
@@ -30,7 +43,7 @@ Masomo is an open‑source game‑changing school management system designed to 
 1. **Clone the repository**:
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/MarcelBag/masomo
    cd Masomo/masomo/backend
    ```
 
@@ -64,18 +77,31 @@ Masomo is an open‑source game‑changing school management system designed to 
    ```bash
    python manage.py collectstatic --noinput
    ```
+7. **Create a superuser to be able to log in and manage students**:
+    masomo/backend/
 
-7. **Run the development server**:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+8. **Run the development server**:
 
    ```bash
    python manage.py runserver
    ```
 
-8. **Access the app**: Open `http://127.0.0.1:8000/` in your browser.
+9. **Access the app**: Open `http://127.0.0.1:8000/` in your browser.
+
+ accssing Django admin panel from /admin
+
+10. **Access the app**: Open `http://127.0.0.1:8000/admin/` in your browser.
+
 
 ## Project Structure
 
+
 ```
+Masomo/masomo
 ├── backend
 │   ├── manage.py
 │   ├── db.sqlite3
@@ -85,10 +111,9 @@ Masomo is an open‑source game‑changing school management system designed to 
 │   └── students
 │       ├── migrations/
 │       ├── templates
-│       │   ├── base.html
 │       │   ├── student_list.html
 │       │   ├── add_student.html
-│       │   ├── student_detail.html
+│       │   ├── student_delete_confirm.html
 │       │   └── student_edit.html
 │       ├── forms.py
 │       ├── models.py
@@ -98,10 +123,13 @@ Masomo is an open‑source game‑changing school management system designed to 
 │   ├── css/styles.css
 │   ├── js/scripts.js
 │   └── templates
-│       ├── index.html
-│       └── Gestionduneecole.html
-├── .github
-│   └── dependabot.yml
+│       ├── base.html
+│       ├── Gestionduneecole.html
+├──-----|---index.html
+│       |── login.html
+│       |── student_detail.html
+│       |── student_edit.html
+│       |── student_list.html
 ├── .gitignore
 ├── package.json
 └── requirements.txt
