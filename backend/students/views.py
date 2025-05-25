@@ -5,6 +5,12 @@ from .forms  import StudentForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+
+class CustomLogoutView(LogoutView):
+    pass
+
 # View to display all students
 def student_list(request):
     students = Student.objects.all()
