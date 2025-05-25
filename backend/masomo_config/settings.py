@@ -82,5 +82,4 @@ print(get_random_secret_key())
 # Where to send users after they log in
 +LOGIN_REDIRECT_URL = '/student_list/'
 # Where to send users after they log out
-
 +LOGOUT_REDIRECT_URL = '/login/'
