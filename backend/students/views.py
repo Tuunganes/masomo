@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.shortcuts import render
 from .models import Student
 from .forms  import StudentForm
 from django.contrib.auth.views import LoginView, LogoutView
@@ -11,11 +12,14 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     pass
 
+# locak the views to authenticated users
+@login_required
 # View to display all students
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'student_list.html', {'students': students})
 
+@login_required
 # View to add a new student
 def add_student(request):
     if request.method == 'POST':
@@ -27,12 +31,14 @@ def add_student(request):
         form = StudentForm()
     return render(request, 'add_student.html', {'form': form})
 
+@login_required
 # ————————————————————————————————————————
 # View to show details for a single student
 def student_detail(request, slug):
     student = get_object_or_404(Student, slug=slug)
     return render(request, 'student_detail.html', {'student': student})
 
+@login_required
 # View to edit an existing student
 def student_edit(request, slug):
     student = get_object_or_404(Student, slug=slug)
@@ -50,5 +56,6 @@ def student_edit(request, slug):
 def index(request):
     return render(request, 'index.html')
 
+@login_required
 def gestion_view(request):
     return render(request, 'Gestionduneecole.html')
