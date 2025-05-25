@@ -14,7 +14,7 @@ def add_student(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('student_list')      # redirect after successful save
+            return redirect('students:student_list')      # redirect after successful save
     else:
         form = StudentForm()
     return render(request, 'add_student.html', {'form': form})
@@ -32,7 +32,7 @@ def student_edit(request, pk):
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('student_detail', pk=student.pk)
+            return redirect('students:student_detail', pk=student.pk)
     else:
         form = StudentForm(instance=student)
     return render(request, 'student_edit.html', {'form': form, 'student': student})

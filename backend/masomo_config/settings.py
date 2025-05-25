@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_flatpickr",  # Flatpickr for date input
     'students',  # Your student management app
 ]
 
