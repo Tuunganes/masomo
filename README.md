@@ -44,7 +44,6 @@ Masomo is an open‑source game‑changing school management system designed to 
 
    ```bash
    git clone https://github.com/MarcelBag/masomo
-   cd Masomo/masomo/backend
    ```
 
 2. **Create & activate a virtual environment**:
