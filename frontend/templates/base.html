@@ -12,12 +12,18 @@
   <header>
     <h1>{% block header_title %}Bienvenue sur Masomo{% endblock %}</h1>
     <nav>
-      <ul>
-        <!-- Use the plural 'students' namespace, not 'student' -->
-        <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
-        <li><a href="{% url 'students:gestion'       %}">Gestion</a></li>
-      </ul>
-    </nav>
+        <ul>
+          <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
+          <li><a href="{% url 'students:gestion' %}">Gestion</a></li>
+      
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+      
   </header>
 
   <main>
