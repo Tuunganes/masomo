@@ -12,4 +12,6 @@ urlpatterns = [
     # path('student/<int:pk>/edit/', views.student_edit,   name='student_edit'),
     path('student/<slug:slug>/',       views.student_detail, name='student_detail'),
     path('student/<slug:slug>/edit/',  views.student_edit,   name='student_edit'),
+    path('student/<slug:slug>/delete/', views.student_delete, name='student_delete'),
+
 ]
