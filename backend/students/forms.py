@@ -3,6 +3,8 @@ from django import forms
 from django_flatpickr.widgets import DatePickerInput
 from django_flatpickr.schemas import FlatpickrOptions
 from .models import Student
+from django.contrib.auth.forms import AuthenticationForm
+from django.utils.translation import gettext_lazy as _
 
 class StudentForm(forms.ModelForm):
     class Meta:
@@ -17,3 +19,10 @@ class StudentForm(forms.ModelForm):
                 )
             ),
         }
+class CustomAuthForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': _(
+            "Oops! The credentials didn’t match our records. Please check and try again."
+        ),
+        'inactive': _("This account is inactive."),
+    }
