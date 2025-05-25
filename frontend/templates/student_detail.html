@@ -9,7 +9,8 @@
   <ul>
     <li><strong>Email:</strong> {{ student.email }}</li>
     <li><strong>Date of Birth:</strong> {{ student.date_of_birth }}</li>
-    <li><strong>Registered on:</strong> {{ student.registration_date }}</li>
+    <!-- <li><strong>Registered on:</strong> {{ student.registration_date }}</li>  -->
+    <li><strong>Registered on:</strong> {{ student.registration_date|date:"F j, Y, P" }}</li>
   </ul>
   <p>
     <a href="{% url 'students:student_edit' student.slug %}">Edit</a> |

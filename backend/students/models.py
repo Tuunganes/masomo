@@ -10,13 +10,16 @@ class Student(models.Model):
     date_of_birth = models.DateField()
     slug          = models.SlugField(unique=True, blank=True)
 
+    # NEW: timestamp when the student was created
+    registration_date = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            # 1) Base slug: first-last-somo
+            # Base slug: first-last-somo (somo is a placeholder meaning "classroom" in Swahili)
             base_slug = slugify(f"{self.first_name}-{self.last_name}-somo")
             unique_slug = base_slug
 
-            # 2) If that already exists, append a counter
+            # adding a counter
             counter = 1
             while Student.objects.filter(slug=unique_slug).exists():
                 unique_slug = f"{base_slug}-{counter}"
