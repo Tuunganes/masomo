@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 from .models import Student
 from .forms  import StudentForm
 from django.contrib.auth.views import LoginView, LogoutView
@@ -54,6 +55,15 @@ def student_edit(request, slug):
         form = StudentForm(instance=student)
     return render(request, 'student_edit.html', {'form': form, 'student': student})
 # c'est dans ce code que vous devez mettre creer une fonction de votre fichier htmnl ensuite creer un url lien de la fonction dans urls.py
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def student_delete(request, slug):
+    student = get_object_or_404(Student, slug=slug)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('students:student_list')
+    return render(request, 'student_delete_confirm.html', {'student': student})
 
 @login_required
 def gestion_view(request):
