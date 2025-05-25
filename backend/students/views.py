@@ -5,9 +5,12 @@ from .models import Student
 from .forms  import StudentForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from .forms import CustomAuthForm
+
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
+    authentication_form = CustomAuthForm
 
 class CustomLogoutView(LogoutView):
     pass
