@@ -6,7 +6,7 @@ from .forms  import StudentForm
 # View to display all students
 def student_list(request):
     students = Student.objects.all()
-    return render(request, 'students/student_list.html', {'students': students})
+    return render(request, 'student_list.html', {'students': students})
 
 # View to add a new student
 def add_student(request):
@@ -14,16 +14,16 @@ def add_student(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('students:student_list')      # redirect after successful save
+            return redirect('student_list')      # redirect after successful save
     else:
         form = StudentForm()
-    return render(request, 'students/add_student.html', {'form': form})
+    return render(request, 'add_student.html', {'form': form})
 
 # ————————————————————————————————————————
 # View to show details for a single student
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
-    return render(request, 'students/student_detail.html', {'student': student})
+    return render(request, 'student_detail.html', {'student': student})
 
 # View to edit an existing student
 def student_edit(request, pk):
@@ -32,10 +32,10 @@ def student_edit(request, pk):
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('students:student_detail', pk=student.pk)
+            return redirect('student_detail', pk=student.pk)
     else:
         form = StudentForm(instance=student)
-    return render(request, 'students/student_edit.html', {'form': form, 'student': student})
+    return render(request, 'student_edit.html', {'form': form, 'student': student})
 # c'est dans ce code que vous devez mettre creer une fonction de votre fichier htmnl ensuite creer un url lien de la fonction dans urls.py
 
 # index and gestion pages
