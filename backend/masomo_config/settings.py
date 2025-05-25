@@ -76,3 +76,11 @@ DEBUG = True
 print(f"BASE_DIR: {BASE_DIR}")
 SECRET_KEY = 'zh%6nkj65)qe&x02wtgh4hs=+x#4(e0a!o4h2ywj^=i4yt4-la'
 print(get_random_secret_key())
+
+# Redirect unauthenticated users to /login/
++LOGIN_URL = '/login/'
+# Where to send users after they log in
++LOGIN_REDIRECT_URL = '/student_list/'
+# Where to send users after they log out
+
++LOGOUT_REDIRECT_URL = '/login/'
