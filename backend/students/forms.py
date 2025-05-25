@@ -22,7 +22,7 @@ class StudentForm(forms.ModelForm):
 class CustomAuthForm(AuthenticationForm):
     error_messages = {
         'invalid_login': _(
-            "Oops! The credentials didn’t match our records. Please check and try again."
+            "Oups ! Les informations d'identification ne correspondent pas à nos données. Veuillez vérifier et réessayer."
         ),
-        'inactive': _("This account is inactive."),
+        'inactive': _("Ce compte est inactif."),
     }
