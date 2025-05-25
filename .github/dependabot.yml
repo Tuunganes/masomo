@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/backend"        # where requirements.txt lives
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/"               # where package.json lives
+    schedule:
+      interval: "weekly"
