@@ -76,7 +76,6 @@ Masomo is an open‑source game‑changing school management system designed to 
 ## Project Structure
 
 ```
-Masomo/masomo
 ├── backend
 │   ├── manage.py
 │   ├── db.sqlite3
@@ -101,6 +100,8 @@ Masomo/masomo
 │   └── templates
 │       ├── index.html
 │       └── Gestionduneecole.html
+├── .github
+│   └── dependabot.yml
 ├── .gitignore
 ├── package.json
 └── requirements.txt
