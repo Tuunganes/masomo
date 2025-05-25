@@ -8,7 +8,7 @@
   <ul>
     {% for student in students %}
       <li>
-        <a href="{% url 'students:student_detail' student.pk %}">
+        <a href="{% url 'students:student_detail' student.slug %}">
           {{ student.first_name }} {{ student.last_name }}
         </a>
         – {{ student.email }}

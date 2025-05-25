@@ -21,18 +21,18 @@ def add_student(request):
 
 # ————————————————————————————————————————
 # View to show details for a single student
-def student_detail(request, pk):
-    student = get_object_or_404(Student, pk=pk)
+def student_detail(request, slug):
+    student = get_object_or_404(Student, slug=slug)
     return render(request, 'student_detail.html', {'student': student})
 
 # View to edit an existing student
-def student_edit(request, pk):
-    student = get_object_or_404(Student, pk=pk)
+def student_edit(request, slug):
+    student = get_object_or_404(Student, slug=slug)
     if request.method == 'POST':
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            return redirect('students:student_detail', pk=student.pk)
+            return redirect('students:student_detail', slug=student.slug)
     else:
         form = StudentForm(instance=student)
     return render(request, 'student_edit.html', {'form': form, 'student': student})
