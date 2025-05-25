@@ -162,3 +162,6 @@ Released under the MIT License. See `LICENSE` for details.
 ---
 
 *Masomo is a project dedicated to empowering African educators and students through technology.*
+
+![alt text](image.png)
+![alt text](image-1.png)
