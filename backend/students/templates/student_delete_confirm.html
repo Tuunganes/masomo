@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Student{% endblock %}
+{% block header_title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+  <p>Are you sure you want to delete <strong>{{ student.first_name }} {{ student.last_name }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'students:student_detail' student.slug %}">Cancel</a>
+  </form>
+{% endblock %}
