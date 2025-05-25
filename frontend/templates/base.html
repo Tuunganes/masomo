@@ -15,18 +15,25 @@
         <ul>
           <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
           <li><a href="{% url 'students:gestion' %}">Gestion</a></li>
+      
           {% if user.is_authenticated %}
-          <li>
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            <!-- Hidden logout form -->
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display:none;">
               {% csrf_token %}
-              <button type="submit" class="nav-link-button">Logout</button>
             </form>
-          </li>
-        {% else %}
-          <li><a href="{% url 'login' %}">Login</a></li>
-        {% endif %}        
+      
+            <!-- Visible link that triggers the form submit -->
+            <li>
+              <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+              </a>
+            </li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
         </ul>
       </nav>
+      
       
   </header>
 
