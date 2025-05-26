@@ -1,6 +1,6 @@
 # Masomo School Management System
 
-Masomo is an open‑source game‑changing school management system designed to digitalize schools in African contexts, with a pilot blueprint in [Bukavu](https://en.wikipedia.org/wiki/Bukavu) & [Goma](https://en.wikipedia.org/wiki/Goma), Democratic Republic of Congo. Our mission is to equip students and teachers with digital materials, Internet access, and ICT training, bridging the educational technology gap in underserved regions.
+📚 Masomo is an open‑source game‑changing school management system designed to digitalize schools in African contexts, with a pilot blueprint in [Bukavu](https://en.wikipedia.org/wiki/Bukavu) & [Goma](https://en.wikipedia.org/wiki/Goma), Democratic Republic of Congo. Our mission is to equip students and teachers with digital materials, Internet access, and ICT training, bridging the educational technology gap in underserved regions.
 
 
 ## Features (Implemented so far)
