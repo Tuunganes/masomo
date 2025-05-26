@@ -30,7 +30,7 @@
 * **Frontend**: HTML5, Tailwind-inspired CSS (custom `styles.css`), vanilla JavaScript
 * **Database**: SQLite (development)
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
