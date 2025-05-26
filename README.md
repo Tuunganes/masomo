@@ -24,7 +24,7 @@
 
 * **SQLite Database**: Lightweight local database, migrations configured.
 
-## Tech Stack
+## ⚙️ Tech Stack
 
 * **Backend**: Django 5.1.5
 * **Frontend**: HTML5, Tailwind-inspired CSS (custom `styles.css`), vanilla JavaScript
