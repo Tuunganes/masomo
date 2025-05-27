@@ -1,10 +1,9 @@
 # Masomo School Management System
 
-📚 Masomo is an open‑source game‑changing school management system designed to digitalize schools in African contexts, with a pilot blueprint in [Bukavu](https://en.wikipedia.org/wiki/Bukavu) & [Goma](https://en.wikipedia.org/wiki/Goma), Democratic Republic of Congo. Our mission is to equip students and teachers with digital materials, Internet access, and ICT training, bridging the educational technology gap in underserved regions.
+📚 Masomo is an open‑source game‑changing school management system designed to digitalize schools in African contexts, with a pilot blueprint in [Bukavu](https://en.wikipedia.org/wiki/Bukavu) & [Goma](https://en.wikipedia.org/wiki/Goma), [Democratic Republic of Congo] . Our mission is to equip students and teachers with digital materials, Internet access, and ICT training, bridging the educational technology gap in underserved regions.
 
 
 ## ✨ Features (Implemented so far)
-
 
 * **Student CRUD**: Create, Read (List & Detail by slug), Update, and Delete student records via web forms with confirmation prompts.
 
@@ -32,13 +31,13 @@
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
 * Python 3.10+ (tested on 3.12)
 * pip
 * (Optional) Virtual environment tool: `venv` or `virtualenv`
 
-### Installation
+### 📥 Installation
 
 1. **Clone the repository**:
 
@@ -88,16 +87,13 @@
    ```bash
    python manage.py runserver
    ```
-
 9. **Access the app**: Open `http://127.0.0.1:8000/` in your browser.
 
  accssing Django admin panel from /admin
 
 10. **Access the app**: Open `http://127.0.0.1:8000/admin/` in your browser.
 
-
-## Project Structure
-
+## 📁 Project Structure
 
 ```
 Masomo/masomo
