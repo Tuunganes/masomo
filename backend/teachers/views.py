@@ -38,3 +38,11 @@ def edit_teacher(request, slug):
     else:
         form = TeacherForm(instance=teacher)
     return render(request, 'edit_teacher.html', {'form': form})
+
+@login_required
+def delete_teacher(request, slug):
+    teacher = get_object_or_404(Teacher, slug=slug)
+    if request.method == 'POST':
+        teacher.delete()
+        return redirect('teachers:teacher_list')
+    return render(request, 'delete_teacher.html', {'teacher': teacher})
