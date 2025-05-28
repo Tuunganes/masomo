@@ -28,3 +28,11 @@ class Teacher(models.Model):
     profile_picture = models.ImageField(upload_to='teacher_profiles/', null=True, blank=True)
     registration_date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.full_name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.full_name
