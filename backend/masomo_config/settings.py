@@ -68,6 +68,12 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Directory where static files will be collected (for production)
 
+
+# ✅ Media files configuration (profile pictures, uploads, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # Default auto field configuration for primary keys
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
