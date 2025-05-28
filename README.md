@@ -103,13 +103,26 @@ Masomo/masomo
 │   ├── masomo_config
 │   │   ├── settings.py
 │   │   └── urls.py
-│   └── students
+│   ├── students
+│   │   ├── migrations/
+│   │   ├── templates
+│   │   │   ├── student_list.html
+│   │   │   ├── add_student.html
+│   │   │   ├── student_delete_confirm.html
+│   │   │   └── student_edit.html
+│   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   └── teachers
 │       ├── migrations/
-│       ├── templates
-│       │   ├── student_list.html
-│       │   ├── add_student.html
-│       │   ├── student_delete_confirm.html
-│       │   └── student_edit.html
+│       ├── templates/
+│       │   └── teachers/
+│       │       ├── teacher_list.html
+│       │       ├── add_teacher.html
+│       │       ├── teacher_detail.html
+│       │       ├── teacher_edit.html
+│       │       └── teacher_delete_confirm.html
 │       ├── forms.py
 │       ├── models.py
 │       ├── urls.py
@@ -120,15 +133,15 @@ Masomo/masomo
 │   └── templates
 │       ├── base.html
 │       ├── Gestionduneecole.html
-|       |---index.html
-│       |── login.html
-│       |── student_detail.html
-│       |── student_edit.html
-│       |── student_list.html
-|
-├──--.gitignore
-├──--package.json
-└──--requirements.txt
+│       ├── index.html
+│       ├── login.html
+│       ├── student_detail.html
+│       ├── student_edit.html
+│       └── student_list.html
+├── .gitignore
+├── package.json
+└── requirements.txt
+
 ```
 
 ## Usage
