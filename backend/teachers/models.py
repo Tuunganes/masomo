@@ -7,7 +7,7 @@ class Teacher(models.Model):
         ('F', 'Female'),
     ]
 
-    TATUS_CHOICES = [
+    STATUS_CHOICES = [
         ('Active', 'Active'),
         ('Inactive', 'Inactive'),
         ('On Leave', 'On Leave'),
