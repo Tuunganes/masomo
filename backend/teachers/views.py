@@ -26,3 +26,15 @@ def add_teacher(request):
 def teacher_detail(request, slug):
     teacher = get_object_or_404(Teacher, slug=slug)
     return render(request, 'teacher_detail.html', {'teacher': teacher})
+
+@login_required
+def edit_teacher(request, slug):
+    teacher = get_object_or_404(Teacher, slug=slug)
+    if request.method == 'POST':
+        form = TeacherForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect('teachers:teacher_list')
+    else:
+        form = TeacherForm(instance=teacher)
+    return render(request, 'edit_teacher.html', {'form': form})
