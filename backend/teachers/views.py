@@ -20,3 +20,9 @@ def add_teacher(request):
     else:
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form})
+
+
+@login_required
+def teacher_detail(request, slug):
+    teacher = get_object_or_404(Teacher, slug=slug)
+    return render(request, 'teacher_detail.html', {'teacher': teacher})
