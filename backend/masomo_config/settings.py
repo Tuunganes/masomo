@@ -22,7 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django_flatpickr",  # Flatpickr for date input
-    'students',  # Your student management app
+    'students',  # student management app
+    'teachers',  # teacher management app
 ]
 
 # Template configuration
