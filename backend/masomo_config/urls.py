@@ -4,7 +4,8 @@ from students.views import CustomLoginView, CustomLogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Admin panel URL
-    path('', include('students.urls', namespace='students')),  # Include the students app URLs
+    path('', include('students.urls', namespace='students')),  # students app URLs
+    path('teachers/', include('teachers.urls')),  # teachers app URLs
 
     # Authentication
     path('login/',  CustomLoginView.as_view(),  name='login'),
