@@ -1,20 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Student: {{ student.first_name }} {{ student.last_name }}{% endblock %}
+{% block title %}Student: {{ student.full_name }}{% endblock %}
 {% block header_title %}Student Details{% endblock %}
 
 {% block content %}
-  <h2>{{ student.first_name }} {{ student.last_name }}</h2>
-  <ul>
-    <li><strong>Email:</strong> {{ student.email }}</li>
-    <li><strong>Date of Birth:</strong> {{ student.date_of_birth }}</li>
-    <!-- <li><strong>Registered on:</strong> {{ student.registration_date }}</li>  -->
-    <li><strong>Registered on:</strong> {{ student.registration_date|date:"F j, Y, P" }}</li>
-  </ul>
-  <p>
-    <a href="{% url 'students:student_edit' student.slug %}">Edit</a> |
-    <a href="{% url 'students:student_delete' student.slug %}">Delete</a> |
-    <a href="{% url 'students:student_list' %}">Back to List</a>
-  </p>
+  <div class="student-card">
+
+    <div class="student-details">
+      <h2 class="text-xl font-bold mb-2">{{ student.full_name }}</h2>
+      <p class="text-sm text-gray-600 mb-4">
+        {{ student.student_id }} · {{ student.class_level }} · {{ student.get_status_display }}
+      </p>
+
+      <ul>
+        <li><strong>Gender:</strong> {{ student.get_gender_display }}</li>
+        <li><strong>Date of Birth:</strong> {{ student.date_of_birth|date:"F j, Y" }}</li>
+        <li><strong>Nationality:</strong> {{ student.nationality }}</li>
+        <li><strong>Address:</strong> {{ student.address }}</li>
+        <li><strong>Phone:</strong> {{ student.phone }}</li>
+        <li><strong>Email:</strong> {{ student.email }}</li>
+        <li><strong>Guardian:</strong> {{ student.guardian_name }} ({{ student.guardian_phone }})</li>
+        <li><strong>Enrol Date:</strong> {{ student.enrol_date|date:"F j, Y" }}</li>
+        <li><strong>Registered on:</strong> {{ student.registration_date|date:"F j, Y, P" }}</li>
+      </ul>
+
+      <div class="mt-4">
+        <a href="{% url 'students:student_edit' student.slug %}" class="text-green-600 mr-4">Edit</a>
+        <a href="{% url 'students:student_delete' student.slug %}" class="text-red-600">Delete</a>
+        <a href="{% url 'students:student_list' %}" class="text-blue-600 ml-4">Back to List</a>
+      </div>
+    </div>
+
+    {% if student.photo %}
+      <a href="{{ student.photo.url }}" target="_blank">
+        <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" class="student-avatar">
+      </a>
+    {% endif %}
+
+  </div>
 {% endblock %}
