@@ -5,20 +5,29 @@
 {% block header_title %}Teachers{% endblock %}
 
 {% block content %}
-  <ul>
+  <ul class="space-y-1">
     {% for teacher in teachers %}
-      <li>
-        <a href="{% url 'teachers:teacher_detail' teacher.slug %}">
-          {{ teacher.first_name }} {{ teacher.last_name }}
+      <li class="flex items-center space-x-2">
+        {% if teacher.photo %}
+          <img src="{{ teacher.photo.url }}"
+               alt="{{ teacher.full_name }}"
+               class="w-8 h-8 rounded-full object-cover">
+        {% endif %}
+
+        <a href="{% url 'teachers:teacher_detail' teacher.slug %}" class="font-medium">
+          {{ teacher.full_name }}
         </a>
-        — {{ teacher.email }} | Status: {{ teacher.get_status_display }}
+
+        <span class="text-sm text-gray-600">
+          — {{ teacher.employee_id }} | {{ teacher.subject }} | {{ teacher.get_status_display }}
+        </span>
       </li>
     {% empty %}
       <li>No teachers yet.</li>
     {% endfor %}
   </ul>
 
-  <p>
-    <a href="{% url 'teachers:teacher_add' %}">Add New Teacher</a>
+  <p class="mt-4">
+    <a href="{% url 'teachers:teacher_add' %}" class="text-blue-600">Add New Teacher</a>
   </p>
 {% endblock %}
