@@ -47,14 +47,13 @@ def student_detail(request, slug):
 def student_edit(request, slug):
     student = get_object_or_404(Student, slug=slug)
     if request.method == 'POST':
-        form = StudentForm(request.POST, instance=student)
+        form = StudentForm(request.POST, request.FILES, instance=student)
         if form.is_valid():
             form.save()
             return redirect('students:student_detail', slug=student.slug)
     else:
         form = StudentForm(instance=student)
     return render(request, 'student_edit.html', {'form': form, 'student': student})
-# c'est dans ce code que vous devez mettre creer une fonction de votre fichier htmnl ensuite creer un url lien de la fonction dans urls.py
 
 @require_http_methods(["GET", "POST"])
 @login_required
