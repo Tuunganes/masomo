@@ -70,6 +70,8 @@
    python manage.py migrate
    python manage.py makemigrations teachers
    python manage.py makemigrations teachers
+   python manage.py migrate
+
    ```
    ```
    rm -rf students/migrations
