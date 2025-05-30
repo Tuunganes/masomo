@@ -25,7 +25,6 @@ class Teacher(models.Model):
             base = slugify(f"{self.first_name}-{self.last_name}-somo")
             unique = base
             counter = 1
-            # Ensure uniqueness
             while Teacher.objects.filter(slug=unique).exists():
                 unique = f"{base}-{counter}"
                 counter += 1
