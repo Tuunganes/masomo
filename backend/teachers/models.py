@@ -2,43 +2,35 @@ from django.db import models
 from django.utils.text import slugify
 
 class Teacher(models.Model):
-    GENDER_CHOICES = [
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('other', 'Other'),
-    ]
-
     STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('on_leave', 'On Leave'),
-        ('retired', 'Retired'),
-        ('terminated', 'Terminated'),
+        ('active',   'Active'),
+        ('inactive', 'Inactive'),
+        ('leave',    'On Leave'),
     ]
 
-    full_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    date_of_birth = models.DateField()
-    nationality = models.CharField(max_length=100)
-    address = models.TextField()
-    subject = models.CharField(max_length=100)
-    qualifications = models.TextField()
-    phone = models.CharField(max_length=20)
-    email = models.EmailField()
-    emergency_contact = models.CharField(max_length=100)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
-    photo = models.ImageField(upload_to='teacher_photos/', null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True)
+    first_name        = models.CharField(max_length=100)
+    last_name         = models.CharField(max_length=100)
+    email             = models.EmailField()
+    date_of_birth     = models.DateField()
+    slug              = models.SlugField(unique=True, blank=True)
+    registration_date = models.DateTimeField(auto_now_add=True)
+    status            = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='active',
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.full_name)
-            slug = base_slug
-            count = 1
-            while Teacher.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{count}"
-                count += 1
-            self.slug = slug
+            base = slugify(f"{self.first_name}-{self.last_name}-somo")
+            unique = base
+            counter = 1
+            # Ensure uniqueness
+            while Teacher.objects.filter(slug=unique).exists():
+                unique = f"{base}-{counter}"
+                counter += 1
+            self.slug = unique
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.full_name
+        return f"{self.first_name} {self.last_name}"
