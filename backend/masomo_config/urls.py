@@ -5,15 +5,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Admin panel URL
-    path('', include('students.urls', namespace='students')),  # students app URLs
-    path('teachers/', include('teachers.urls')),  # teachers app URLs
+    path('admin/', admin.site.urls),
+    path('', include('students.urls', namespace='students')),  # Students at root
+    path('teachers/', include('teachers.urls', namespace='teachers')),  # Teachers under /teachers/
 
-    # Authentication
     path('login/',  CustomLoginView.as_view(),  name='login'),
     path('logout/', CustomLogoutView.as_view(), name='logout'),
-    
 ]
+
 
 # ✅ Serve media files during development
 if settings.DEBUG:

@@ -6,7 +6,7 @@
   <form method="post" class="mt-4">
     {% csrf_token %}
     <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Yes, Delete</button>
-    <a href="{% url 'teacher_list' %}" class="ml-2 underline">Cancel</a>
+    <a href="{% url 'teachers:teacher_list' %}" class="ml-2 underline">Cancel</a>
   </form>
 </div>
 {% endblock %}
