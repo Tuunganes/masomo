@@ -7,6 +7,11 @@ class Teacher(models.Model):
         ('inactive', 'Inactive'),
         ('leave',    'On Leave'),
     ]
+    GENDER_CHOICES = [
+        ('male',   'Male'),
+        ('female', 'Female'),
+        ('other',  'Other / Prefer not to say'),
+    ]
 
     first_name        = models.CharField(max_length=100)
     last_name         = models.CharField(max_length=100)
