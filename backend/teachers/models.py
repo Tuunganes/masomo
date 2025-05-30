@@ -12,7 +12,7 @@ class Teacher(models.Model):
     GENDER_CHOICES = [
         ('male',   'Male'),
         ('female', 'Female'),
-        ('other',  'Other / Prefer not to say'),
+        
     ]
 
     employee_id       = models.CharField(max_length=30, unique=True)
