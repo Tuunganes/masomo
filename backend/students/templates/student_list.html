@@ -1,18 +1,38 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List</title>
-</head>
-<body>
-    <h1>Student List</h1>
-    <ul>
-        {% for student in students %}
-            <li>{{ student.name }} - {{ student.age }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% block title %}Student List{% endblock %}
+{% block header_title %}Students{% endblock %}
+
+{% block content %}
+  {% if students %}
+    <div>
+      {% for student in students %}
+        <div class="student-row">
+          {% if student.photo %}
+            <img src="{{ student.photo.url }}" alt="{{ student.full_name }}">
+          {% else %}
+            <img src="{% static 'assets/default-avatar.png' %}" alt="Avatar">
+          {% endif %}
+
+          <div class="student-meta">
+            <a href="{% url 'students:student_detail' student.slug %}" class="name">
+              {{ student.full_name }}
+            </a>
+            <div class="info">
+              {{ student.student_id }} &middot;
+              {{ student.class_level }} &middot;
+              {{ student.get_status_display }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No students yet.</p>
+  {% endif %}
+
+  <p class="mt-4">
+    <a href="{% url 'students:add_student' %}" class="text-blue-600">Add New Student</a>
+  </p>
+{% endblock %}
