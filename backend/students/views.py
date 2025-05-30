@@ -27,7 +27,7 @@ def student_list(request):
 # View to add a new student
 def add_student(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST)
+        form = StudentForm(request.POST, request.FILES)  # include request.FILES to handle photo upload
         if form.is_valid():
             form.save()
             return redirect('students:student_list')      # redirect after successful save
