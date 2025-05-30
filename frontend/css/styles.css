@@ -153,7 +153,7 @@ footer {
     color: #555;
   }
   
-  /* === Student list rows (mirrors teacher style) === */
+  /* ---- Student list rows (same style as teacher-row) ---- */
 .student-row {
     display: flex;
     align-items: center;
@@ -176,6 +176,7 @@ footer {
   }
   .student-meta .name { font-weight: 600; }
   .student-meta .info { font-size: .875rem; color: #555; }
+  
   
   /* === Student detail card (mirrors teacher detail) === */
   .student-card {
