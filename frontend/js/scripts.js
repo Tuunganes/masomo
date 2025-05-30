@@ -1,17 +1,15 @@
 /* frontend/js/scripts.js */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const message = document.createElement('p');
-    message.textContent = 'Welcome to your Django app!';
-    document.body.appendChild(message);
-});
-// Fonction pour afficher la section correspondante lorsqu'on clique sur un onglet
+/* ------------------------------------------------------------------
+   TAB HANDLER – show / hide .tab-content sections
+------------------------------------------------------------------- */
 function showSection(sectionId) {
-    // Masquer toutes les sections
-    const sections = document.querySelectorAll('.tab-content');
-    sections.forEach(section => section.classList.remove('active'));
-
-    // Afficher la section sélectionnée
-    const activeSection = document.getElementById(sectionId);
-    activeSection.classList.add('active');
-}
+    // hide all sections
+    document.querySelectorAll('.tab-content')
+             .forEach(s => s.classList.remove('active'));
+  
+    // show the one we clicked
+    const active = document.getElementById(sectionId);
+    if (active) active.classList.add('active');
+  }
+  
