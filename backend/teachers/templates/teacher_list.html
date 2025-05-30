@@ -9,8 +9,7 @@
     {% for teacher in teachers %}
       <li class="flex items-center space-x-2">
         {% if teacher.photo %}
-          <img src="{{ teacher.photo.url }}"
-               alt="{{ teacher.full_name }}"
+          <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}"
                class="w-8 h-8 rounded-full object-cover">
         {% endif %}
 

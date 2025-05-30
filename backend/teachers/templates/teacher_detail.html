@@ -1,20 +1,20 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}Teacher: {{ teacher.full_name }}{% endblock %}
+{% block header_title %}Teacher Details{% endblock %}
 
 {% block content %}
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">{{ teacher.full_name }}</h1>
+  <h2>{{ teacher.full_name }}</h2>
 
   {% if teacher.photo %}
-    <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" class="w-32 h-32 object-cover rounded mb-4">
-  {% else %}
-    <p class="text-sm italic text-gray-500">No photo uploaded.</p>
+    <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}"
+         class="w-32 h-32 rounded object-cover mb-4">
   {% endif %}
 
-  <ul class="space-y-1">
-    <li><strong>Gender:</strong> {{ teacher.gender }}</li>
+  <ul>
+    <li><strong>Employee ID:</strong> {{ teacher.employee_id }}</li>
+    <li><strong>Gender:</strong> {{ teacher.get_gender_display }}</li>
     <li><strong>Date of Birth:</strong> {{ teacher.date_of_birth|date:"F j, Y" }}</li>
     <li><strong>Nationality:</strong> {{ teacher.nationality }}</li>
     <li><strong>Address:</strong> {{ teacher.address }}</li>
@@ -23,14 +23,14 @@
     <li><strong>Phone:</strong> {{ teacher.phone }}</li>
     <li><strong>Email:</strong> {{ teacher.email }}</li>
     <li><strong>Emergency Contact:</strong> {{ teacher.emergency_contact }}</li>
+    <li><strong>Hire Date:</strong> {{ teacher.hire_date|date:"F j, Y" }}</li>
     <li><strong>Status:</strong> {{ teacher.get_status_display }}</li>
     <li><strong>Registered on:</strong> {{ teacher.registration_date|date:"F j, Y, P" }}</li>
   </ul>
 
-  <div class="mt-4">
-    <a href="{% url 'teachers:edit_teacher' teacher.slug %}" class="text-green-600 mr-4">Edit</a>
-    <a href="{% url 'teachers:delete_teacher' teacher.slug %}" class="text-red-600">Delete</a>
+  <p class="mt-4">
+    <a href="{% url 'teachers:teacher_edit' teacher.slug %}" class="text-green-600 mr-4">Edit</a>
+    <a href="{% url 'teachers:teacher_delete' teacher.slug %}" class="text-red-600">Delete</a>
     <a href="{% url 'teachers:teacher_list' %}" class="text-blue-600 ml-4">Back to List</a>
-  </div>
-</div>
+  </p>
 {% endblock %}

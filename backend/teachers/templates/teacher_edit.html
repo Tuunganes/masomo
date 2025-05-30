@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Edit: {{ teacher.first_name }} {{ teacher.last_name }}{% endblock %}
+{% block title %}Edit: {{ teacher.full_name }}{% endblock %}
 {% block header_title %}Edit Teacher{% endblock %}
 
 {% block content %}
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save Changes</button>
     <a href="{% url 'teachers:teacher_detail' teacher.slug %}">Cancel</a>
   </form>
+
+  {{ form.media }}
 {% endblock %}

@@ -68,7 +68,14 @@
    ```bash
    python manage.py makemigrations
    python manage.py migrate
+   python manage.py makemigrations teachers
+   python manage.py makemigrations teachers
    ```
+   ```
+   rm -rf students/migrations
+
+   ``` 
+   just in case you want to delete something
 
 6. **Collect static files** (for production):
 

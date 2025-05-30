@@ -5,9 +5,11 @@
 {% block header_title %}Add New Teacher{% endblock %}
 
 {% block content %}
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save</button>
   </form>
+
+  {{ form.media }}   {# Flatpickr CSS & JS injected #}
 {% endblock %}
