@@ -17,6 +17,7 @@ def add_teacher(request):
         if form.is_valid():
             form.save()
             return redirect('teachers:teacher_list')
+            
     else:
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form})
@@ -31,13 +32,14 @@ def teacher_detail(request, slug):
 def edit_teacher(request, slug):
     teacher = get_object_or_404(Teacher, slug=slug)
     if request.method == 'POST':
-        form = TeacherForm(request.POST, instance=teacher)
+        form = TeacherForm(request.POST, request.FILES, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect('teachers:teacher_list')
+            return redirect('teachers:teacher_detail', slug=teacher.slug)
     else:
         form = TeacherForm(instance=teacher)
-    return render(request, 'edit_teacher.html', {'form': form})
+    return render(request, 'edit_teacher.html', {'form': form, 'teacher': teacher})
+
 
 @login_required
 def delete_teacher(request, slug):

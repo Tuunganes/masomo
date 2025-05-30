@@ -3,35 +3,41 @@ from django.utils.text import slugify
 
 class Teacher(models.Model):
     GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
     ]
 
     STATUS_CHOICES = [
-        ('Active', 'Active'),
-        ('Inactive', 'Inactive'),
-        ('On Leave', 'On Leave'),
-        ('Retired', 'Retired'),
+        ('active', 'Active'),
+        ('on_leave', 'On Leave'),
+        ('retired', 'Retired'),
+        ('terminated', 'Terminated'),
     ]
 
     full_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    date_of_birth = models.DateField(null=True, blank=True)
-    nationality = models.CharField(max_length=100, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    subject = models.CharField(max_length=255)
-    qualifications = models.TextField(null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    date_of_birth = models.DateField()
+    nationality = models.CharField(max_length=100)
+    address = models.TextField()
+    subject = models.CharField(max_length=100)
+    qualifications = models.TextField()
     phone = models.CharField(max_length=20)
-    email = models.EmailField(unique=True)
-    emergency_contact = models.CharField(max_length=100, null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
-    profile_picture = models.ImageField(upload_to='teacher_profiles/', null=True, blank=True)
-    registration_date = models.DateTimeField(auto_now_add=True)
+    email = models.EmailField()
+    emergency_contact = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    photo = models.ImageField(upload_to='teacher_photos/', null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.full_name)
+            base_slug = slugify(self.full_name)
+            slug = base_slug
+            count = 1
+            while Teacher.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{count}"
+                count += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
