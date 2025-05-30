@@ -121,3 +121,35 @@ footer {
     }
   }
   
+  /* === Teacher list rows === */
+.teacher-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .6rem 0;
+    border-bottom: 1px solid #eee;   /* light divider */
+  }
+  
+  .teacher-row:last-child { border-bottom: none; }
+  
+  .teacher-row img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  .teacher-meta {
+    flex: 1 1 auto;
+  }
+  
+  .teacher-meta .name {
+    font-weight: 600;
+  }
+  
+  .teacher-meta .info {
+    font-size: .875rem;   /* sm */
+    color: #555;
+  }
+  
