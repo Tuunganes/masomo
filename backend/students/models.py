@@ -52,7 +52,7 @@ class Student(models.Model):
     email            = models.EmailField(blank=True)
     guardian_name    = models.CharField(max_length=120, blank=True)
     guardian_phone   = models.CharField(max_length=30, blank=True)
-    class_level      = models.CharField(max_length=50, blank=True)
+    #class_level      = models.CharField(max_length=50, blank=True)
     enrol_date       = models.DateField()
     status           = models.CharField(max_length=12, choices=STATUS_CHOICES, default='active')
     photo            = models.ImageField(upload_to='student_photos/', blank=True)
