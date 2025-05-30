@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit: {{ student.full_name }}{% endblock %}
+{% block header_title %}Edit Student{% endblock %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'students:student_detail' student.slug %}">Cancel</a>
+  </form>
+
+  {{ form.media }}   {# Flatpickr CSS & JS for the date fields #}
+{% endblock %}
