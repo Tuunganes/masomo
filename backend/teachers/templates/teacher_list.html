@@ -5,34 +5,64 @@
 {% block header_title %}Teachers{% endblock %}
 
 {% block content %}
+  <!-- ──────────────── Search & Filter Bar ──────────────── -->
+  <form method="GET"
+        style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+
+    <!-- free-text search -->
+    <input type="text"
+           name="q"
+           value="{{ q }}"
+           placeholder="Search name, ID, email…"
+           style="flex:1; padding:.45rem .6rem; border:1px solid #ccc; border-radius:4px;">
+
+    <!-- status dropdown -->
+    <select name="status"
+            style="padding:.45rem; border:1px solid #ccc; border-radius:4px;">
+      <option value="">All Statuses</option>
+      {% for code, label in status_choices %}
+        <option value="{{ code }}" {% if code == status %}selected{% endif %}>
+          {{ label }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- submit -->
+    <button class="btn-primary" style="width:auto;">Search</button>
+  </form>
+
+  <!-- ──────────────── Teacher Rows ──────────────── -->
   {% if teachers %}
     <div>
       {% for teacher in teachers %}
         <div class="teacher-row">
+          {# avatar #}
           {% if teacher.photo %}
             <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}">
           {% else %}
-            <img src="{% static 'assets/default-avatar.png' %}" alt="Avatar">
+            <img src="{% static 'assets/default-avatar.png' %}" alt="avatar">
           {% endif %}
 
+          {# meta info #}
           <div class="teacher-meta">
             <a href="{% url 'teachers:teacher_detail' teacher.slug %}" class="name">
               {{ teacher.full_name }}
             </a>
             <div class="info">
-              {{ teacher.employee_id }} &middot;
-              {{ teacher.subject }} &middot;
-              {{ teacher.get_status_display }}
+              {{ teacher.employee_id }}
+              • {{ teacher.subject }}
+              • {{ teacher.get_status_display }}
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p>No teachers yet.</p>
+    <p>No matching teachers.</p>
   {% endif %}
 
+  <!-- add button -->
   <p class="mt-4">
-    <a href="{% url 'teachers:teacher_add' %}" class="text-blue-600">Add New Teacher</a>
+    <a href="{% url 'teachers:teacher_add' %}" class="text-link">Add&nbsp;New&nbsp;Teacher</a>
   </p>
 {% endblock %}
