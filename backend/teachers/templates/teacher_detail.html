@@ -5,32 +5,41 @@
 {% block header_title %}Teacher Details{% endblock %}
 
 {% block content %}
-  <h2>{{ teacher.full_name }}</h2>
+  <div class="profile-card">
 
-  {% if teacher.photo %}
-    <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}"
-         class="w-32 h-32 rounded object-cover mb-4">
-  {% endif %}
+    <div class="profile-details">
+      <h2 class="text-xl font-bold mb-2">{{ teacher.full_name }}</h2>
+      <p class="text-sm text-gray-600 mb-4">
+        {{ teacher.employee_id }} · {{ teacher.subject }} · {{ teacher.get_status_display }}
+      </p>
 
-  <ul>
-    <li><strong>Employee ID:</strong> {{ teacher.employee_id }}</li>
-    <li><strong>Gender:</strong> {{ teacher.get_gender_display }}</li>
-    <li><strong>Date of Birth:</strong> {{ teacher.date_of_birth|date:"F j, Y" }}</li>
-    <li><strong>Nationality:</strong> {{ teacher.nationality }}</li>
-    <li><strong>Address:</strong> {{ teacher.address }}</li>
-    <li><strong>Subject:</strong> {{ teacher.subject }}</li>
-    <li><strong>Qualifications:</strong> {{ teacher.qualifications }}</li>
-    <li><strong>Phone:</strong> {{ teacher.phone }}</li>
-    <li><strong>Email:</strong> {{ teacher.email }}</li>
-    <li><strong>Emergency Contact:</strong> {{ teacher.emergency_contact }}</li>
-    <li><strong>Hire Date:</strong> {{ teacher.hire_date|date:"F j, Y" }}</li>
-    <li><strong>Status:</strong> {{ teacher.get_status_display }}</li>
-    <li><strong>Registered on:</strong> {{ teacher.registration_date|date:"F j, Y, P" }}</li>
-  </ul>
+      <ul>
+        <li><strong>Gender:</strong> {{ teacher.get_gender_display }}</li>
+        <li><strong>Date of Birth:</strong> {{ teacher.date_of_birth|date:"F j, Y" }}</li>
+        <li><strong>Nationality:</strong> {{ teacher.nationality }}</li>
+        <li><strong>Address:</strong> {{ teacher.address }}</li>
+        <li><strong>Phone:</strong> {{ teacher.phone }}</li>
+        <li><strong>Email:</strong> {{ teacher.email }}</li>
+        <li><strong>Emergency Contact:</strong> {{ teacher.emergency_contact }}</li>
+        <li><strong>Hire Date:</strong> {{ teacher.hire_date|date:"F j, Y" }}</li>
+        <li><strong>Qualifications:</strong> {{ teacher.qualifications|linebreaksbr }}</li>
+        <li><strong>Registered on:</strong> {{ teacher.registration_date|date:"F j, Y, P" }}</li>
+      </ul>
 
-  <p class="mt-4">
-    <a href="{% url 'teachers:teacher_edit' teacher.slug %}" class="text-green-600 mr-4">Edit</a>
-    <a href="{% url 'teachers:teacher_delete' teacher.slug %}" class="text-red-600">Delete</a>
-    <a href="{% url 'teachers:teacher_list' %}" class="text-blue-600 ml-4">Back to List</a>
-  </p>
+      <div class="mt-4">
+        <a href="{% url 'teachers:teacher_edit' teacher.slug %}" class="text-green-600 mr-4">Edit</a>
+        <a href="{% url 'teachers:teacher_delete' teacher.slug %}" class="text-red-600">Delete</a>
+        <a href="{% url 'teachers:teacher_list' %}" class="text-blue-600 ml-4">Back to List</a>
+      </div>
+    </div>
+
+    {% if teacher.photo %}
+      <a href="{{ teacher.photo.url }}" target="_blank">
+        <img src="{{ teacher.photo.url }}"
+             alt="{{ teacher.full_name }}"
+             class="profile-avatar">
+      </a>
+    {% endif %}
+
+  </div>
 {% endblock %}
