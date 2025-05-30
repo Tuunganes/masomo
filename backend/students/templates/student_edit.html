@@ -2,15 +2,41 @@
 {% load static %}
 
 {% block title %}Edit: {{ student.full_name }}{% endblock %}
-{% block header_title %}Edit Student{% endblock %}
+{% block header_title %}{% endblock %}
 
 {% block content %}
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-    <a href="{% url 'students:student_detail' student.slug %}">Cancel</a>
-  </form>
+  <div class="form-card">
+    <h1>Edit Student</h1>
 
-  {{ form.media }}
+    <form method="POST" enctype="multipart/form-data" class="grid-2" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- same field list & order as in add_student.html -->
+      <label>Student&nbsp;ID: {{ form.student_id }}</label>
+      <label>First&nbsp;name: {{ form.first_name }}</label>
+      <label>Last&nbsp;name: {{ form.last_name }}</label>
+      <label>Gender: {{ form.gender }}</label>
+      <label>Date&nbsp;of&nbsp;Birth: {{ form.date_of_birth }}</label>
+      <label>Nationality: {{ form.nationality }}</label>
+
+      <label class="grid-span-2">Address: {{ form.address }}</label>
+
+      <label>Phone: {{ form.phone }}</label>
+      <label>Email: {{ form.email }}</label>
+      <label>Guardian&nbsp;name: {{ form.guardian_name }}</label>
+      <label>Guardian&nbsp;phone: {{ form.guardian_phone }}</label>
+      <label>Class&nbsp;level: {{ form.class_level }}</label>
+      <label>Enrol&nbsp;date: {{ form.enrol_date }}</label>
+      <label>Status: {{ form.status }}</label>
+
+      <label class="grid-span-2">Photo&nbsp;(jpg/png ≤ 2 MB): {{ form.photo }}</label>
+
+      <button class="btn-primary grid-span-2">Save&nbsp;Changes</button>
+      <a href="{% url 'students:student_detail' student.slug %}"
+         class="text-link grid-span-2" style="text-align:center;">Cancel</a>
+    </form>
+
+    {{ form.media }}
+  </div>
 {% endblock %}
