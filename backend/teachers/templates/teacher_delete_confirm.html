@@ -1,14 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Delete Teacher{% endblock %}
-{% block header_title %}Confirm Deletion{% endblock %}
+{% block title %}Delete: {{ teacher.full_name }}{% endblock %}
+{% block header_title %}{% endblock %}
 
 {% block content %}
-  <p>Are you sure you want to delete <strong>{{ teacher.first_name }} {{ teacher.last_name }}</strong>?</p>
-  <form method="POST">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-    <a href="{% url 'teachers:teacher_detail' teacher.slug %}">Cancel</a>
-  </form>
+  <div class="form-card">
+
+    <h1 style="color:#c0392b;">Delete Teacher</h1>
+
+    <p style="text-align:center; margin-bottom:1.25rem;">
+      Are you <strong>absolutely sure</strong> you want to delete
+      <br><strong>{{ teacher.full_name }}</strong>?
+      <br>This action cannot be un done.
+    </p>
+
+    {% if teacher.photo %}
+      <div style="display:flex; justify-content:center; margin-bottom:1.25rem;">
+        <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}"
+             class="profile-avatar">
+      </div>
+    {% endif %}
+
+    <form method="POST" class="grid-2">
+      {% csrf_token %}
+      <button type="submit" class="btn-primary grid-span-2"
+              style="background:#c0392b;">Yes, Delete</button>
+      <a href="{% url 'teachers:teacher_detail' teacher.slug %}"
+         class="text-link grid-span-2" style="text-align:center;">
+        Cancel
+      </a>
+    </form>
+
+  </div>
 {% endblock %}

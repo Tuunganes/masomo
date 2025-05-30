@@ -2,15 +2,41 @@
 {% load static %}
 
 {% block title %}Edit: {{ teacher.full_name }}{% endblock %}
-{% block header_title %}Edit Teacher{% endblock %}
+{% block header_title %}{% endblock %}
 
 {% block content %}
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-    <a href="{% url 'teachers:teacher_detail' teacher.slug %}">Cancel</a>
-  </form>
+  <div class="form-card">
+    <h1>Edit Teacher</h1>
 
-  {{ form.media }}
+    <form method="POST" enctype="multipart/form-data" class="grid-2" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <label>Employee&nbsp;ID: {{ form.employee_id }}</label>
+      <label>First&nbsp;name: {{ form.first_name }}</label>
+      <label>Last&nbsp;name: {{ form.last_name }}</label>
+      <label>Gender: {{ form.gender }}</label>
+      <label>Date&nbsp;of&nbsp;Birth: {{ form.date_of_birth }}</label>
+      <label>Nationality: {{ form.nationality }}</label>
+
+      <label class="grid-span-2">Address: {{ form.address }}</label>
+
+      <label>Phone: {{ form.phone }}</label>
+      <label>Email: {{ form.email }}</label>
+      <label>Emergency&nbsp;Contact: {{ form.emergency_contact }}</label>
+      <label>Subject: {{ form.subject }}</label>
+
+      <label class="grid-span-2">Qualifications: {{ form.qualifications }}</label>
+
+      <label>Hire date: {{ form.hire_date }}</label>
+      <label>Status: {{ form.status }}</label>
+
+      <label class="grid-span-2">Profile&nbsp;photo&nbsp;(jpg/png ≤ 2 MB): {{ form.photo }}</label>
+
+      <button class="btn-primary grid-span-2">Save&nbsp;Changes</button>
+      <a href="{% url 'teachers:teacher_detail' teacher.slug %}" class="text-link grid-span-2" style="text-align:center;">Cancel</a>
+    </form>
+
+    {{ form.media }}
+  </div>
 {% endblock %}
