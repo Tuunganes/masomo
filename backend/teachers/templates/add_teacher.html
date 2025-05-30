@@ -2,14 +2,43 @@
 {% load static %}
 
 {% block title %}Add Teacher{% endblock %}
-{% block header_title %}Add New Teacher{% endblock %}
+{% block header_title %}{% endblock %}
 
 {% block content %}
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
+  <div class="form-card">
+    <h1>Add New Teacher</h1>
 
-  {{ form.media }}   {# Flatpickr CSS & JS injected #}
+    <form method="POST" enctype="multipart/form-data" class="grid-2" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <label>Employee&nbsp;ID: {{ form.employee_id }}</label>
+      <label>First&nbsp;name: {{ form.first_name }}</label>
+      <label>Last&nbsp;name: {{ form.last_name }}</label>
+      <label>Gender: {{ form.gender }}</label>
+      <label>Date&nbsp;of&nbsp;Birth: {{ form.date_of_birth }}</label>
+      <label>Nationality: {{ form.nationality }}</label>
+
+      {# span Address across 2 columns #}
+      <label class="grid-span-2">Address: {{ form.address }}</label>
+
+      <label>Phone: {{ form.phone }}</label>
+      <label>Email: {{ form.email }}</label>
+      <label>Emergency&nbsp;Contact: {{ form.emergency_contact }}</label>
+      <label>Subject: {{ form.subject }}</label>
+
+      {# Qualifications textarea full width #}
+      <label class="grid-span-2">Qualifications: {{ form.qualifications }}</label>
+
+      <label>Hire date: {{ form.hire_date }}</label>
+      <label>Status: {{ form.status }}</label>
+
+      {# Photo input full width #}
+      <label class="grid-span-2">Profile&nbsp;photo&nbsp;(jpg/png ≤ 2 MB): {{ form.photo }}</label>
+
+      <button class="btn-primary grid-span-2">Save</button>
+    </form>
+
+    {{ form.media }}
+  </div>
 {% endblock %}
