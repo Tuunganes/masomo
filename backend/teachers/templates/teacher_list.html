@@ -1,17 +1,24 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teacher List{% endblock %}
+{% block header_title %}Teachers{% endblock %}
+
 {% block content %}
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Teachers</h1>
-  <a href="{% url 'teachers:add_teacher' %}" class="bg-blue-600 text-white px-4 py-2 rounded">Add Teacher</a>
-  <ul class="mt-4">
+  <ul>
     {% for teacher in teachers %}
-      <li class="border-b py-2 flex justify-between items-center">
-        <a href="{% url 'teachers:teacher_detail' teacher.slug %}" class="text-blue-700">{{ teacher.full_name }}</a>
-        <a href="{% url 'teachers:edit_teacher' teacher.slug %}" class="text-green-600">Edit</a>
+      <li>
+        <a href="{% url 'teachers:teacher_detail' teacher.slug %}">
+          {{ teacher.first_name }} {{ teacher.last_name }}
+        </a>
+        — {{ teacher.email }} | Status: {{ teacher.get_status_display }}
       </li>
     {% empty %}
-      <li>No teachers found.</li>
+      <li>No teachers yet.</li>
     {% endfor %}
   </ul>
-</div>
+
+  <p>
+    <a href="{% url 'teachers:teacher_add' %}">Add New Teacher</a>
+  </p>
 {% endblock %}

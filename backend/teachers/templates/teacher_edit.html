@@ -1,11 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit: {{ teacher.first_name }} {{ teacher.last_name }}{% endblock %}
+{% block header_title %}Edit Teacher{% endblock %}
+
 {% block content %}
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Edit {{ teacher.full_name }}</h1>
-  <form method="post" enctype="multipart/form-data">
+  <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Update</button>
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'teachers:teacher_detail' teacher.slug %}">Cancel</a>
   </form>
-</div>
 {% endblock %}

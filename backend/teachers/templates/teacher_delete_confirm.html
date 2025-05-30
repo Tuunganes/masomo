@@ -1,12 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Teacher{% endblock %}
+{% block header_title %}Confirm Deletion{% endblock %}
+
 {% block content %}
-<div class="container mx-auto p-4 text-center">
-  <h1 class="text-2xl font-bold mb-4">Delete {{ teacher.full_name }}</h1>
-  <p>Are you sure you want to delete this teacher?</p>
-  <form method="post" class="mt-4">
+  <p>Are you sure you want to delete <strong>{{ teacher.first_name }} {{ teacher.last_name }}</strong>?</p>
+  <form method="POST">
     {% csrf_token %}
-    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Yes, Delete</button>
-    <a href="{% url 'teachers:teacher_list' %}" class="ml-2 underline">Cancel</a>
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'teachers:teacher_detail' teacher.slug %}">Cancel</a>
   </form>
-</div>
 {% endblock %}

@@ -15,6 +15,7 @@
     <nav>
         <ul>
           <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
+          <li><a href="{% url 'teachers:teacher_list' %}">Enseignants</a></li> 
           <li><a href="{% url 'students:gestion' %}">Gestion</a></li>
       
           {% if user.is_authenticated %}
