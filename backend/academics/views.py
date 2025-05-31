@@ -1,63 +1,66 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_http_methods
+
 from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
 
 
-
+# ---------- LIST PAGES (already there) ---------------------------------
 @login_required
-@permission_required("academics.view_schoolclass", raise_exception=True)
 def class_list(request):
-    """List classes & quick-add form."""
-    qs = SchoolClass.objects.select_related("academic_year")
+    ...
+@login_required
+def year_list(request):
+    ...
 
-    # --- simple search ------------------------------------------------------
-    q = request.GET.get("q", "").strip()
-    if q:
-        qs = qs.filter(name__icontains=q)
-
-    # --- year filter --------------------------------------------------------
-    year_id = request.GET.get("year")
-    if year_id:
-        qs = qs.filter(academic_year_id=year_id)
-
-    # nice ordering
-    classes = qs.order_by("academic_year__start_date", "name")
-
-    # quick-add form ---------------------------------------------------------
-    form = SchoolClassForm(request.POST or None)
+# ======================================================================
+#                       CLASS  EDIT  &  DELETE
+# ======================================================================
+@login_required
+@permission_required("academics.change_schoolclass", raise_exception=True)
+def class_edit(request, pk):
+    school_class = get_object_or_404(SchoolClass, pk=pk)
+    form = SchoolClassForm(request.POST or None, instance=school_class)
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("academics:class_list")
-
-    return render(
-        request,
-        "class_list.html",   # template path (matches previous answer)
-        {
-            "classes": classes,
-            "form":    form,
-            "q":       q,
-            "year":    year_id,
-            "year_choices": AcademicYear.objects.order_by("-start_date"),
-        },
-    )
+    return render(request, "class_edit.html", {"form": form, "obj": school_class})
 
 
 @login_required
-@permission_required("academics.view_academicyear", raise_exception=True)
-def year_list(request):
-    """List academic years & quick-add form."""
-    years = AcademicYear.objects.order_by("-start_date")
-    form  = AcademicYearForm(request.POST or None)
+@permission_required("academics.delete_schoolclass", raise_exception=True)
+@require_http_methods(["GET", "POST"])
+def class_delete(request, pk):
+    school_class = get_object_or_404(SchoolClass, pk=pk)
+    if request.method == "POST":
+        school_class.delete()
+        return redirect("academics:class_list")
+    return render(request, "class_delete_confirm.html", {"obj": school_class})
 
+
+# ======================================================================
+#                      YEAR  EDIT  &  DELETE
+# ======================================================================
+@login_required
+@permission_required("academics.change_academicyear", raise_exception=True)
+def year_edit(request, pk):
+    year = get_object_or_404(AcademicYear, pk=pk)
+    form = AcademicYearForm(request.POST or None, instance=year)
     if request.method == "POST" and form.is_valid():
-        # If you tick “is_current”, unset others
         if form.cleaned_data.get("is_current"):
-            AcademicYear.objects.update(is_current=False)
+            AcademicYear.objects.exclude(pk=year.pk).update(is_current=False)
         form.save()
         return redirect("academics:year_list")
+    return render(request, "year_edit.html", {"form": form, "obj": year})
 
-    return render(request, "year_list.html", {
-        "years": years,
-        "form":  form,
-    })
+
+@login_required
+@permission_required("academics.delete_academicyear", raise_exception=True)
+@require_http_methods(["GET", "POST"])
+def year_delete(request, pk):
+    year = get_object_or_404(AcademicYear, pk=pk)
+    if request.method == "POST":
+        year.delete()
+        return redirect("academics:year_list")
+    return render(request, "year_delete_confirm.html", {"obj": year})
