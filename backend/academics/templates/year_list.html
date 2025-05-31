@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Academic Years{% endblock %}
+{% block header_title %}Academic Years{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom:1rem">Existing academic years</h2>
+
+<table style="border-collapse:collapse; margin-bottom:2rem">
+  <thead>
+    <tr style="text-align:left">
+      <th>Name</th><th>Start</th><th>End</th><th>Current?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for y in years %}
+      <tr>
+        <td>{{ y.name }}</td>
+        <td>{{ y.start_date }}</td>
+        <td>{{ y.end_date }}</td>
+        <td>{% if y.is_current %}✔{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No academic years yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 style="margin-bottom:.5rem">Add an academic year</h2>
+<form method="post" style="max-width:420px">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn-primary">Save</button>
+</form>
+{% endblock %}
