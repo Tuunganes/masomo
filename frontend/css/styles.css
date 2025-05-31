@@ -284,3 +284,12 @@
   margin-top:.5rem;
 }
 .btn-primary:hover{ background:#0053c1; }
+
+.add-year-link{
+    font-size:.80rem;
+    margin-left:.4rem;
+    color:#006dff;
+    text-decoration:none;
+  }
+  .add-year-link:hover{ text-decoration:underline; }
+  
