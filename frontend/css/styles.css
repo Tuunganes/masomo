@@ -293,3 +293,7 @@
   }
   .add-year-link:hover{ text-decoration:underline; }
   
+/* tiny links for year ad*/
+.tiny-link     { font-size:.80rem; color:#006dff; text-decoration:none; }
+.tiny-link:hover{ text-decoration:underline; }
+.text-red       { color:#c91c00; }
