@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django_flatpickr",  # Flatpickr for date input
     'students',  # student management app
     'teachers',  # teacher management app
+    'academics',  # academic management app
 ]
 
 # Template configuration
