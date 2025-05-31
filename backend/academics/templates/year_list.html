@@ -1,34 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Academic Years{% endblock %}
 {% block header_title %}Academic Years{% endblock %}
 
 {% block content %}
-<h2 style="margin-bottom:1rem">Existing academic years</h2>
+  <h2>Existing academic years</h2>
+  {% if years %}
+    <table class="table-plain">
+      <thead><tr><th>Name</th><th>Start</th><th>End</th><th>Current</th></tr></thead>
+      <tbody>
+      {% for y in years %}
+        <tr>
+          <td>{{ y.name }}</td>
+          <td>{{ y.start_date }}</td>
+          <td>{{ y.end_date }}</td>
+          <td>{{ y.is_current|yesno:"✔,―" }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No academic years yet.</p>
+  {% endif %}
 
-<table style="border-collapse:collapse; margin-bottom:2rem">
-  <thead>
-    <tr style="text-align:left">
-      <th>Name</th><th>Start</th><th>End</th><th>Current?</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for y in years %}
-      <tr>
-        <td>{{ y.name }}</td>
-        <td>{{ y.start_date }}</td>
-        <td>{{ y.end_date }}</td>
-        <td>{% if y.is_current %}✔{% endif %}</td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="4">No academic years yet.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <h2 class="mt-6">Add an academic year</h2>
 
-<h2 style="margin-bottom:.5rem">Add an academic year</h2>
-<form method="post" style="max-width:420px">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn-primary">Save</button>
-</form>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn-primary">Save</button>
+  </form>
+
+  {{ form.media }}   {# <-- brings flatpickr JS/CSS for the two date fields #}
 {% endblock %}
