@@ -35,6 +35,11 @@
           <div class="name">{{ c.name }}</div>
           <div class="info">{{ c.academic_year.name }}</div>
         </div>
+           <div class="class-actions">
+                 <a href="{% url 'academics:class_edit'   c.pk %}" class="tiny-link">Edit</a> ·
+                 <a href="{% url 'academics:class_delete' c.pk %}"
+                    class="tiny-link text-red">Delete</a>
+           </div>
       </li>
     {% endfor %}
   </ul>
