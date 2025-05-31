@@ -247,3 +247,30 @@
   /* Simple wrapper for labels + widgets */
   .field-row { display: flex; flex-direction: column; }
   
+  /* === Year list table & form ============================================ */
+.year-table         { width: 100%; border-collapse: collapse; margin-bottom:2rem; }
+.year-table th,
+.year-table td       { padding:.5rem .75rem; border-bottom:1px solid #e4e4e4; }
+.year-table th       { text-align:left; background:#f7f7f7; font-weight:600; }
+.year-table td.center{ text-align:center; }
+
+.section-title       { font-size:1.25rem; font-weight:700; margin:1.2rem 0 .6rem; }
+
+.empty-msg           { color:#666; margin-bottom:1.5rem; }
+
+.year-form .form-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem 1.5rem;
+  margin-bottom:1rem;
+}
+.year-form .full-row { grid-column: 1 / -1; }
+
+.btn-primary{
+  display:block; width:100%; max-width:350px;
+  background:#006dff; color:#fff; font-weight:600;
+  border:none; padding:.6rem 1rem; border-radius:4px;
+  cursor:pointer; transition:.15s background;
+  margin-top:.5rem;
+}
+.btn-primary:hover{ background:#0053c1; }
