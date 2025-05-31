@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from academics.models import SchoolClass
 
 class Student(models.Model):
     STATUS_CHOICES = [
@@ -12,33 +13,12 @@ class Student(models.Model):
         ('female', 'Female'),
         
     ]
-
-    CLASS_LEVEL_CHOICES = [
-        # Maternelle
-        ('m1',  '1ère maternelle'),
-        ('m2',  '2ème maternelle'),
-        ('m3',  '3ème maternelle'),
-        # Primaire
-        ('p1',  '1ère primaire'),
-        ('p2',  '2ème primaire'),
-        ('p3',  '3ème primaire'),
-        ('p4',  '4ème primaire'),
-        ('p5',  '5ème primaire'),
-        ('p6',  '6ème primaire'),
-        ('p7',  '7ème primaire'),
-        ('p8',  '8ème primaire'),
-        # Secondaire
-        ('s1',  '1ère secondaire'),
-        ('s2',  '2ème secondaire'),
-        ('s3',  '3ème secondaire'),
-        ('s4',  '4ème secondaire'),
-    ]
-
-    # … existing fields …
-    class_level   = models.CharField(
-        max_length=3,
-        choices=CLASS_LEVEL_CHOICES,
-        blank=True
+# backend/students/models.py
+class Student(models.Model):
+    school_class = models.ForeignKey(
+        SchoolClass, null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name="students"
     )
 
     student_id       = models.CharField(max_length=30, unique=True)
