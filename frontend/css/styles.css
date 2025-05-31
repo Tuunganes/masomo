@@ -335,3 +335,10 @@
   }
   .btn-link:hover{text-decoration:underline;}
   
+  /* can't be deleted, blocked by a FK  */
+  .confirm-card.error {
+    border-left: 6px solid #e53e3e;   
+}
+.blocked-list {
+    margin: .5rem 0 0 1rem;
+}
