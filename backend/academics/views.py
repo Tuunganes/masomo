@@ -4,21 +4,43 @@ from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
 
 
+
 @login_required
 @permission_required("academics.view_schoolclass", raise_exception=True)
 def class_list(request):
     """List classes & quick-add form."""
-    classes = SchoolClass.objects.select_related("academic_year").order_by("name")
-    form    = SchoolClassForm(request.POST or None)
+    qs = SchoolClass.objects.select_related("academic_year")
 
+    # --- simple search ------------------------------------------------------
+    q = request.GET.get("q", "").strip()
+    if q:
+        qs = qs.filter(name__icontains=q)
+
+    # --- year filter --------------------------------------------------------
+    year_id = request.GET.get("year")
+    if year_id:
+        qs = qs.filter(academic_year_id=year_id)
+
+    # nice ordering
+    classes = qs.order_by("academic_year__start_date", "name")
+
+    # quick-add form ---------------------------------------------------------
+    form = SchoolClassForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("academics:class_list")
 
-    return render(request, "class_list.html", {
-        "classes": classes,
-        "form":    form,
-    })
+    return render(
+        request,
+        "class_list.html",   # template path (matches previous answer)
+        {
+            "classes": classes,
+            "form":    form,
+            "q":       q,
+            "year":    year_id,
+            "year_choices": AcademicYear.objects.order_by("-start_date"),
+        },
+    )
 
 
 @login_required
