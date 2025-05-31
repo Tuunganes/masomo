@@ -15,7 +15,7 @@ def class_list(request):
         form.save()
         return redirect("academics:class_list")
 
-    return render(request, "academics/class_list.html", {
+    return render(request, "class_list.html", {
         "classes": classes,
         "form": form,
     })

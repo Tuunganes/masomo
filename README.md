@@ -69,7 +69,7 @@
    python manage.py makemigrations
    python manage.py migrate
    python manage.py makemigrations teachers
-   python manage.py makemigrations teachers
+   python manage.py makemigrations students
    python manage.py migrate
 
    ```
@@ -112,6 +112,18 @@ Masomo/masomo
 │   ├── masomo_config
 │   │   ├── settings.py
 │   │   └── urls.py
+── academics
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py            # has SchoolClass, Subject, AcademicYear
+    ├── views.py             # class_list view we added
+    ├── forms.py             # AcademicYear, SchoolClass, …
+    ├── urls.py              # path("classes/", ...)
+    └── templates/
+        └── academics/
+            └── class_list.html
+            └── year_list.html       ←
 │   ├── students
 │   │   ├── migrations/
 │   │   ├── templates
