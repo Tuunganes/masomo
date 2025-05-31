@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Cannot delete{% endblock %}
+{% block header_title %}Delete Academic Year{% endblock %}
+
+{% block content %}
+<div class="confirm-card error">
+
+  <p class="mb">
+      <strong>“{{ obj.name }}”</strong> can’t be deleted because
+      it is linked to the following class{{ blocking|length|pluralize }}:
+  </p>
+
+  <ul class="blocked-list">
+    {% for c in blocking %}
+      <li>
+        <a href="{% url 'academics:class_edit' c.pk %}">
+           {{ c.name }} ({{ c.academic_year.name }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="confirm-actions mt">
+     <a href="{% url 'academics:year_list' %}" class="btn-link">Back to list</a>
+  </div>
+</div>
+{% endblock %}
