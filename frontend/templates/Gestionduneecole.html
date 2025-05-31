@@ -24,7 +24,10 @@
                 <li><a href="#" class="tab-link" onclick="showSection('eleve')">Espace Élève</a></li>
                 <li><a href="#" class="tab-link" onclick="showSection('parent')">Espace Parent</a></li>
                 <li><a href="#" class="tab-link" onclick="showSection('general')">Fonctionnalités Générales</a></li>
-                <li><a href="#" class="tab-link" onclick="showSection('class')">Fonctionnalités Générales</a></li>
+                <li><a href="class_list" class="tab-link" onclick="showSection('class')">Fonctionnalités Générales</a></li>
+                <li><a href="{% url 'academics:class_list' %}">Classes</a></li>
+
+
             </ul>
         </nav>
     </header>
