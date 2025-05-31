@@ -131,10 +131,24 @@ def year_edit(request, pk):
 @permission_required("academics.delete_academicyear", raise_exception=True)
 @require_http_methods(["GET", "POST"])
 def year_delete(request, pk):
-    obj = get_object_or_404(AcademicYear, pk=pk)
+    year = get_object_or_404(AcademicYear, pk=pk)
 
+    # ─── user clicked the red “Delete” button ───────────────────────────
     if request.method == "POST":
-        obj.delete()
-        return redirect("academics:year_list")
+        try:
+            year.delete()
+            return redirect("academics:year_list")
 
-    return render(request, "year_delete_confirm.html", {"obj": obj})
+        # ---- the year is still used by at least one SchoolClass --------
+        except ProtectedError as exc:
+            # exc.protected_objects returns the queryset that blocks delete
+            blocking = exc.protected_objects
+            return render(
+                request,
+                "year_delete_blocked.html",
+                {"obj": year, "blocking": blocking},
+                status=409,              # “conflict”
+            )
+
+    # ─── initial GET: regular confirmation page ────────────────────────
+    return render(request, "year_delete_confirm.html", {"obj": year})
