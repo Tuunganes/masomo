@@ -17,15 +17,16 @@
            style="flex:1; padding:.45rem .6rem; border:1px solid #ccc; border-radius:4px;">
 
     <!-- class-level dropdown -->
-    <select name="class_level"
-            style="padding:.45rem; border:1px solid #ccc; border-radius:4px;">
-      <option value="">All Classes</option>
-      {% for code, label in class_choices %}
-        <option value="{{ code }}" {% if code == class_level %}selected{% endif %}>
-          {{ label }}
-        </option>
-      {% endfor %}
-    </select>
+    <select name="class_id"
+        style="padding:.45rem; border:1px solid #ccc; border-radius:4px;">
+
+    <option value="">All Classes</option>
+        {% for c in classes %}
+            <option value="{{ c.id }}" {% if c.id|stringformat:'s' == class_id %}selected{% endif %}>
+            {{ c.name }}
+            </option>
+        {% endfor %}
+        </select>
 
     <!-- submit -->
     <button class="btn-primary" style="width:auto;">Search</button>

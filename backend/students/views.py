@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.db import models                      # for Q search
+from academics.models import SchoolClass
 
 from .models import Student
 from .forms  import StudentForm, CustomAuthForm
@@ -18,11 +19,12 @@ class CustomLogoutView(LogoutView):
 
 
 # ───────────  Searchable / Filterable LIST  ────────────
+
 @login_required
 def student_list(request):
-    qs = Student.objects.all()
+    qs = Student.objects.select_related("school_class")
 
-    # search text
+    # — search —
     q = request.GET.get("q", "").strip()
     if q:
         qs = qs.filter(
@@ -32,20 +34,22 @@ def student_list(request):
             models.Q(email__icontains=q)
         )
 
-    # class-level dropdown
-    cl = request.GET.get("class_level")
-    if cl:
-        qs = qs.filter(class_level=cl)
+    # — filter by class id —
+    class_id = request.GET.get("class_id")
+    if class_id:
+        qs = qs.filter(school_class_id=class_id)
 
     qs = qs.order_by("last_name", "first_name")
 
-    return render(request, "student_list.html", {
-        "students":      qs,
-        "q":             q,
-        "class_level":   cl,
-        "class_choices": Student.CLASS_LEVEL_CHOICES,
-    })
+    # list of classes (current year or all)
+    classes = SchoolClass.objects.all().order_by("name")
 
+    return render(request, "student_list.html", {
+        "students":  qs,
+        "q":         q,
+        "class_id":  class_id,
+        "classes":   classes,   # ⬅ pass to template
+    })
 
 # ───────────  ADD  ────────────
 @login_required
