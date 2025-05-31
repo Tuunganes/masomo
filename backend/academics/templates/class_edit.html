@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block header_title %}Edit Class{% endblock %}
+{% block content %}
+<h2>Edit “{{ obj.name }}”</h2>
+<form method="post" class="form-compact">
+  {% csrf_token %}{{ form.as_p }}
+  <button class="btn-primary">Save</button>
+  <a href="{% url 'academics:class_list' %}">Cancel</a>
+</form>
+{% endblock %}
