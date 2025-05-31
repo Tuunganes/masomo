@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q
+from django.db.models import ProtectedError
 
 from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
