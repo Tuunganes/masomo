@@ -14,17 +14,22 @@
   <thead>
     <tr>
       <th>Name</th><th>Start</th><th>End</th><th class="center">Current</th>
+      <th></th> 
     </tr>
   </thead>
   <tbody>
     {% for y in years %}
       <tr>
-        <td>{{ y.name }}</td>
-        <td>{{ y.start_date|date:"M j, Y" }}</td>
-        <td>{{ y.end_date|date:"M j, Y" }}</td>
-        <td class="center">
+            <td>{{ y.name }}</td>
+            <td>{{ y.start_date|date:"M j, Y" }}</td>
+            <td>{{ y.end_date|date:"M j, Y" }}</td>
+            <td class="center">
           {% if y.is_current %} ✔ {% endif %}
         </td>
+            <td>
+                <a href="{% url 'academics:year_edit'   y.pk %}" class="tiny-link">Edit</a> ·
+                <a href="{% url 'academics:year_delete' y.pk %}" class="tiny-link text-red">Delete</a>
+            </td>
       </tr>
     {% endfor %}
   </tbody>
