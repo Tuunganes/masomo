@@ -144,34 +144,44 @@
   
 
 /* === Class list rows (modeled after teacher-row) ========================= */
-.class-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: .6rem 0;
-    border-bottom: 1px solid #eee;
+/* === Classes list ====================================================== */
+.class-search{
+    display:flex; gap:.5rem; margin-bottom:1rem;
   }
-  .class-row:last-child { border-bottom: none; }
-  
-  /* circular badge with the first letter of the class */
-  .class-badge {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: #3490ff;
-    color: #fff;
-    font-weight: 600;
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  .class-search input,
+  .class-search select{
+    padding:.45rem .6rem; border:1px solid #ccc; border-radius:4px;
+    font-size:.95rem; flex:1 1 auto; max-width:260px;
   }
+  .class-search button{
+    background:#006dff; color:#fff; border:none;
+    padding:.48rem 1.2rem; border-radius:4px; font-weight:600;
+  }
+  .class-search button:hover{ background:#0053c1; }
   
-  .class-meta { flex: 1 1 auto; }
-  .class-meta .name { font-weight: 600; }
-  .class-meta .info { font-size: .875rem; color: #555; }
+  .class-list{ list-style:none; margin:0; padding:0; }
+  .class-row{
+    display:flex; gap:1rem; align-items:center;
+    padding:.7rem 0; border-bottom:1px solid #eee;
+  }
+  .class-badge{
+    width:42px; height:42px; flex-shrink:0;
+    border-radius:50%; background:#006dff; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+  }
+  .class-meta .name{ font-weight:600; font-size:1.05rem; }
+  .class-meta .info{ font-size:.875rem; color:#555; }
   
-
+  .class-form .form-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1rem 1.5rem; margin-bottom:1rem;
+  }
+  .section-title{ font-size:1.25rem; font-weight:700; margin:1.2rem 0 .6rem; }
+  .empty-msg{ color:#666; margin:1.2rem 0; }
+  
+  /* Re-use the primary button already defined earlier */
+  
 
   /* -------------------------------------------------------------------
      ----------  AUTH & GENERIC FORM CARDS ----------

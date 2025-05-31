@@ -5,55 +5,67 @@
 {% block header_title %}Classes{% endblock %}
 
 {% block content %}
-  <!-- search / filter bar ---------------------------------------------------->
-  <form method="get" class="search-bar">
-    <input type="text" name="q" placeholder="Search class…"
-           value="{{ request.GET.q|default_if_none:'' }}" />
 
-    <select name="year">
+<!-- ========== Search / filter ========================================== -->
+<form class="class-search" method="get">
+  <input type="text"
+         name="q"
+         placeholder="Search class…"
+         value="{{ request.GET.q|default_if_none:'' }}">
+  <select name="year">
       <option value="">All years</option>
       {% for y in year_choices %}
-        <option value="{{ y.id }}" {% if y.id|stringformat:"s" == request.GET.year %}selected{% endif %}>
-          {{ y.name }}
+        <option value="{{ y.id }}"
+                {% if y.id|stringformat:"s" == request.GET.year %}selected{% endif %}>
+            {{ y.name }}
         </option>
       {% endfor %}
-    </select>
+  </select>
+  <button type="submit">Search</button>
+</form>
 
-    <button type="submit" class="btn-primary">Search</button>
-  </form>
 
-  <!-- list ------------------------------------------------------------------->
-  {% if classes %}
-    <ul class="class-list">
-      {% for c in classes %}
-        <li class="class-row">
-          <!-- “avatar” column : just an initial badge -->
-          <div class="class-badge">
-            {{ c.name|slice:":1" }}
-          </div>
+<!-- ========== Class list =============================================== -->
+{% if classes %}
+  <ul class="class-list">
+    {% for c in classes %}
+      <li class="class-row">
+        <div class="class-badge">{{ forloop.counter }}</div>
+        <div class="class-meta">
+          <div class="name">{{ c.name }}</div>
+          <div class="info">{{ c.academic_year.name }}</div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-msg">No classes found.</p>
+{% endif %}
 
-          <!-- meta -->
-          <div class="class-meta">
-            <a href="#" class="name">{{ c.name }}</a>
-            <div class="info">
-              {{ c.academic_year.name }}
-              {% if c.main_teacher %}&middot; {{ c.main_teacher.full_name }}{% endif %}
-            </div>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No classes yet.</p>
-  {% endif %}
 
-  <!-- add form --------------------------------------------------------------->
-  <h2 class="mt-6">Add a Class</h2>
-  <form method="post" class="add-form">
+<!-- ========== Quick-add form =========================================== -->
+<h2 class="section-title">Add a Class</h2>
+<form method="post" class="class-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn-primary">Save</button>
+    {{ form.non_field_errors }}
+  
+    <div class="form-grid">
+      <div>
+        {{ form.name.label_tag }}{{ form.name }}
+        {{ form.name.errors }}
+      </div>
+  
+      <div>
+        {{ form.academic_year.label_tag }}{{ form.academic_year }}
+        <a href="{% url 'academics:year_list' %}"
+           class="add-year-link"
+           title="Add a new academic year">➕ Add year</a>
+        {{ form.academic_year.errors }}
+      </div>
+    </div>
+  
+    <button type="submit" class="btn-primary">Save</button>
   </form>
+  
 
-  {{ form.media }}
 {% endblock %}
