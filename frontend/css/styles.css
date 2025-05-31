@@ -297,3 +297,4 @@
 .tiny-link     { font-size:.80rem; color:#006dff; text-decoration:none; }
 .tiny-link:hover{ text-decoration:underline; }
 .text-red       { color:#c91c00; }
+.class-actions  { margin-left:auto; }
