@@ -5,32 +5,64 @@
 {% block header_title %}Academic Years{% endblock %}
 
 {% block content %}
-  <h2>Existing academic years</h2>
-  {% if years %}
-    <table class="table-plain">
-      <thead><tr><th>Name</th><th>Start</th><th>End</th><th>Current</th></tr></thead>
-      <tbody>
-      {% for y in years %}
-        <tr>
-          <td>{{ y.name }}</td>
-          <td>{{ y.start_date }}</td>
-          <td>{{ y.end_date }}</td>
-          <td>{{ y.is_current|yesno:"✔,―" }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p>No academic years yet.</p>
-  {% endif %}
 
-  <h2 class="mt-6">Add an academic year</h2>
+<!-- ===== Existing years ================================================= -->
+<h2 class="section-title">Existing academic years</h2>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn-primary">Save</button>
-  </form>
+{% if years %}
+<table class="year-table">
+  <thead>
+    <tr>
+      <th>Name</th><th>Start</th><th>End</th><th class="center">Current</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for y in years %}
+      <tr>
+        <td>{{ y.name }}</td>
+        <td>{{ y.start_date|date:"M j, Y" }}</td>
+        <td>{{ y.end_date|date:"M j, Y" }}</td>
+        <td class="center">
+          {% if y.is_current %} ✔ {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p class="empty-msg">No academic years yet.</p>
+{% endif %}
 
-  {{ form.media }}   {# <-- brings flatpickr JS/CSS for the two date fields #}
+
+<!-- ===== Quick-add form =============================================== -->
+<h2 class="section-title">Add an academic year</h2>
+
+<form method="post" class="year-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div class="form-grid">
+    <div>
+      {{ form.name.label_tag }}{{ form.name }}
+      {{ form.name.errors }}
+    </div>
+
+    <div>
+      {{ form.start_date.label_tag }}{{ form.start_date }}
+      {{ form.start_date.errors }}
+    </div>
+
+    <div>
+      {{ form.end_date.label_tag }}{{ form.end_date }}
+      {{ form.end_date.errors }}
+    </div>
+
+    <div class="full-row">
+      {{ form.is_current }} {{ form.is_current.label_tag }}
+    </div>
+  </div>
+
+  <button type="submit" class="btn-primary">Save</button>
+</form>
+
 {% endblock %}
