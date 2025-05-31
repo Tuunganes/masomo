@@ -1,9 +1,22 @@
 {% extends "base.html" %}
+
+{% block title %}Delete Academic Year{% endblock %}
 {% block header_title %}Delete Academic Year{% endblock %}
+
 {% block content %}
-<p>Really delete the year <strong>{{ obj.name }}</strong> ?</p>
-<form method="post">{% csrf_token %}
-  <button class="btn-danger">Yes, delete</button>
-  <a href="{% url 'academics:year_list' %}">Cancel</a>
-</form>
+<div class="confirm-card">
+  <p>
+    Really delete the academic year<br>
+    <span class="highlight">{{ obj.name }}</span> ?
+  </p>
+
+  <form method="post" class="confirm-actions">
+      {% csrf_token %}
+      <!-- the form POSTs to this same URL (/year/<pk>/delete/) -->
+      <button type="submit" class="btn-danger">Yes, delete</button>
+
+      <!-- cancel just returns to the year list -->
+      <a href="{% url 'academics:year_list' %}" class="btn-link">Cancel</a>
+  </form>
+</div>
 {% endblock %}

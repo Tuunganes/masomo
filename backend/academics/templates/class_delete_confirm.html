@@ -1,9 +1,19 @@
 {% extends "base.html" %}
+
+{% block title %}Delete Class{% endblock %}
 {% block header_title %}Delete Class{% endblock %}
+
 {% block content %}
-<p>Really delete the class <strong>{{ obj.name }}</strong> ?</p>
-<form method="post">{% csrf_token %}
-  <button class="btn-danger">Yes, delete</button>
-  <a href="{% url 'academics:class_list' %}">Cancel</a>
-</form>
+<div class="confirm-card">
+  <p>
+    Really delete the class<br>
+    <span class="highlight">{{ obj.name }}</span> ?
+  </p>
+
+  <form method="post" class="confirm-actions">
+      {% csrf_token %}
+      <button type="submit" class="btn-danger">Yes, delete</button>
+      <a href="{% url 'academics:class_list' %}" class="btn-link">Cancel</a>
+  </form>
+</div>
 {% endblock %}
