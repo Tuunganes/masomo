@@ -142,6 +142,37 @@
     color: #555;
   }
   
+
+/* === Class list rows (modeled after teacher-row) ========================= */
+.class-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .6rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .class-row:last-child { border-bottom: none; }
+  
+  /* circular badge with the first letter of the class */
+  .class-badge {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #3490ff;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .class-meta { flex: 1 1 auto; }
+  .class-meta .name { font-weight: 600; }
+  .class-meta .info { font-size: .875rem; color: #555; }
+  
+
+
   /* -------------------------------------------------------------------
      ----------  AUTH & GENERIC FORM CARDS ----------
   -------------------------------------------------------------------- */
