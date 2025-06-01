@@ -71,8 +71,23 @@ class Subject(models.Model):
     def __str__(self):
         return f"{self.name} – {self.school_class}"
 '''
-class Meta:
-            ordering = ["code"]
+class Term(models.Model):
+    """
+    e.g. Semester 1 / Trimester 2 – tied to an AcademicYear
+    """
+    academic_year = models.ForeignKey(
+        AcademicYear,
+        on_delete=models.CASCADE,
+        related_name="terms"
+    )
+    name         = models.CharField(max_length=50)          # “Semester 1”
+    start_date   = models.DateField()
+    end_date     = models.DateField()
+    is_current   = models.BooleanField(default=False)
 
-def __str__(self):
-            return f"{self.code} – {self.name}"
+    class Meta:
+        unique_together = ("academic_year", "name")
+        ordering        = ["start_date"]
+
+    def __str__(self):
+        return f"{self.name} ({self.academic_year.name})"
