@@ -10,6 +10,8 @@ from academics.models import Subject
 from academics.forms import SubjectForm
 from django.db import models
 from teachers.models import Teacher # to filter teacher 
+from .models import Term
+from .forms  import TermForm
 
 # ─────────────────────────────────────────────────────────────
 # LIST + QUICK-ADD  PAGES
@@ -222,3 +224,55 @@ def subject_delete(request, pk):
         subj.delete()
         return redirect("academics:subject_list")
     return render(request, "subject_delete_confirm.html", {"obj": subj})
+
+
+# ─────────────────────────  TERM LIST / ADD  ───────────────────────────
+@login_required
+@permission_required("academics.view_term", raise_exception=True)
+def term_list(request):
+    qs = Term.objects.select_related("academic_year").order_by(
+        "-academic_year__start_date", "start_date"
+    )
+
+    # -- simple filter by year -----------------------
+    year_id = request.GET.get("year")
+    if year_id:
+        qs = qs.filter(academic_year_id=year_id)
+
+    form = TermForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        if form.cleaned_data.get("is_current"):
+            Term.objects.update(is_current=False)
+        form.save()
+        return redirect("academics:term_list")
+
+    return render(request, "academics/term_list.html", {
+        "terms": qs,
+        "form":  form,
+        "year_choices": AcademicYear.objects.only("id", "name"),
+        "year_id": year_id,
+    })
+
+# ──────────────────────────  TERM EDIT  ────────────────────────────────
+@login_required
+@permission_required("academics.change_term", raise_exception=True)
+def term_edit(request, pk):
+    term = get_object_or_404(Term, pk=pk)
+    form = TermForm(request.POST or None, instance=term)
+    if request.method == "POST" and form.is_valid():
+        if form.cleaned_data.get("is_current"):
+            Term.objects.exclude(pk=term.pk).update(is_current=False)
+        form.save()
+        return redirect("academics:term_list")
+    return render(request, "academics/term_edit.html", {"form": form, "obj": term})
+
+# ─────────────────────────  TERM DELETE  ───────────────────────────────
+@login_required
+@permission_required("academics.delete_term", raise_exception=True)
+@require_http_methods(["GET", "POST"])
+def term_delete(request, pk):
+    term = get_object_or_404(Term, pk=pk)
+    if request.method == "POST":
+        term.delete()
+        return redirect("academics:term_list")
+    return render(request, "academics/term_delete_confirm.html", {"obj": term})
