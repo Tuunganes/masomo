@@ -6,11 +6,16 @@ from teachers.models import Teacher
 from academics.models import Subject 
 
 # ─── one reusable widget ──────────────────────────────────────────────────────
+'''
 date_widget = DatePickerInput(
     options=FlatpickrOptions(
         altFormat="F j, Y",   # “May 31 2025”
         allowInput=True,
     )
+)
+'''
+_date = DatePickerInput(
+    options=FlatpickrOptions(altFormat='F j, Y', allowInput=True)
 )
 
 class SchoolClassForm(forms.ModelForm):
