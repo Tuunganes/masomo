@@ -21,8 +21,9 @@ _date = DatePickerInput(
 class SchoolClassForm(forms.ModelForm):
     class Meta:
         model  = SchoolClass
-        fields = ["name", "academic_year"]
-        labels = {"name": "Class name", "academic_year": "Academic year"}
+        fields = ["name", "academic_year", "main_teacher", "teachers", "room"]
+        widgets = {"teachers": forms.CheckboxSelectMultiple}
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
