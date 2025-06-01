@@ -8,6 +8,7 @@ from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
 from academics.models import Subject
 from academics.forms import SubjectForm
+from django.db import models
 
 # ─────────────────────────────────────────────────────────────
 # LIST + QUICK-ADD  PAGES
