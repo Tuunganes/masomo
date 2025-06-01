@@ -175,7 +175,7 @@ def subject_list(request):
         form.save()
         return redirect("academics:subject_list")
 
-    return render(request, "academics/subject_list.html", {
+    return render(request, "subject_list.html", {
         "subjects": qs.order_by("code"),
         "form":     form,
         "q":        q,
