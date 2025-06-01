@@ -28,10 +28,15 @@ class SchoolClass(models.Model):
         related_name="classes"
     )
     main_teacher  = models.ForeignKey(
-        Teacher,
+        'teachers.Teacher',  # Using string reference to avoid circular import
         null=True, blank=True,
         on_delete=models.SET_NULL,
-        related_name="homerooms"
+        related_name="homeroom_of"
+    )
+    teachers       = models.ManyToManyField(
+        'teachers.Teacher',
+        related_name='classes',
+        blank=True    # optional: you can leave it empty and link later
     )
     room          = models.CharField(max_length=30, blank=True)
 

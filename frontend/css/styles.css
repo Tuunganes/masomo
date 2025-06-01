@@ -342,3 +342,26 @@
 .blocked-list {
     margin: .5rem 0 0 1rem;
 }
+
+/* === Subject list rows === */
+.subject-list   { margin-top: 1rem; }
+.subject-row    {
+  display: grid;
+  grid-template-columns: 100px 1fr 160px 200px;
+  gap: .5rem;
+  padding: .5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.subject-row:last-child { border-bottom: none; }
+.subject-row .code   { font-weight: 600; color: #2c3e50; }
+.subject-row .name   { font-weight: 600; }
+.subject-row .class,
+.subject-row .teacher { font-size: .875rem; color: #555; }
+
+/* simple horizontal filter bar */
+.subject-search {
+  display: flex; gap: .5rem; flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.subject-search input,
+.subject-search select { padding: .35rem .5rem; }
