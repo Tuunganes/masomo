@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Class{% endblock %}
+{% block header_title %}Delete Class{% endblock %}
+
+{% block content %}
+<div class="confirm-card">
+  <p>
+    Really delete the term<br>
+    <span class="highlight">{{ obj.name }}</span> ?
+  </p>
+
+  <form method="post" class="confirm-actions">
+      {% csrf_token %}
+      <button type="submit" class="btn-danger">Yes, delete</button>
+      <a href="{% url 'academics:term_list' %}" class="btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}
