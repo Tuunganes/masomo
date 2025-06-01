@@ -1,5 +1,6 @@
 from django.db import models
-from teachers.models import Teacher 
+from teachers.models import Teacher # Importing Teacher model for foreign key relationships
+#from teachers.models import Teacher 
 
 
 class AcademicYear(models.Model):
@@ -57,10 +58,16 @@ class Subject(models.Model):
         on_delete=models.SET_NULL,
         related_name="subjects"
     )
-
+'''
     class Meta:
         unique_together = ("code", "school_class")
         ordering = ["name"]
 
     def __str__(self):
         return f"{self.name} – {self.school_class}"
+'''
+class Meta:
+            ordering = ["code"]
+
+def __str__(self):
+            return f"{self.code} – {self.name}"

@@ -23,7 +23,7 @@ class SchoolClassForm(forms.ModelForm):
             AcademicYear.objects.order_by("-start_date")
         )
 
-# ─── NEW: AcademicYearForm with widgets ───────────────────────────────────────
+# ─── AcademicYearForm with widgets ───────────────────────────────────────
 class AcademicYearForm(forms.ModelForm):
     class Meta:
         model  = AcademicYear
@@ -32,3 +32,25 @@ class AcademicYearForm(forms.ModelForm):
             "start_date": date_widget,
             "end_date":   date_widget,
         }
+
+class SubjectForm(forms.ModelForm):
+    class Meta:
+        model  = Subject
+        fields = ["code", "name", "school_class", "teacher"]
+        labels = {
+            "code":         "Code (unique)",
+            "name":         "Subject / Course title",
+            "school_class": "Class",
+            "teacher":      "Teacher in charge",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # nice ordering
+        self.fields["school_class"].queryset = (
+            SchoolClass.objects.select_related("academic_year")
+                        .order_by("academic_year__name", "name")
+        )
+        self.fields["teacher"].queryset = (
+            Teacher.objects.order_by("last_name", "first_name")
+        )
