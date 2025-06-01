@@ -8,51 +8,62 @@
 
 <!-- ========== Search / Filters ===================================== -->
 <form class="subject-search" method="get">
-    <input  type="text" name="q" placeholder="Search subject or code…"
-            value="{{ q|default_if_none:'' }}">
-  
-    <select name="class">
-        <option value="">All classes</option>
-        {% for c in class_choices %}
-          <option value="{{ c.id }}"
-            {% if c.id|stringformat:"s" == cls %}selected{% endif %}>
-            {{ c.name }}
-          </option>
-        {% endfor %}
-    </select>
-  
-    <select name="teacher">
-        <option value="">All teachers</option>
-        {% for t in teacher_choices %}
-          <option value="{{ t.id }}"
-            {% if t.id|stringformat:"s" == t_id %}selected{% endif %}>
-            {{ t.first_name }} {{ t.last_name }}
-          </option>
-        {% endfor %}
-    </select>
-  
-    <button type="submit">Filter</button>
-  </form>
-  
-  <!-- ========== Subject list ========================================= -->
-  {% if subjects %}
-    <ul class="subject-list">
-      {% for s in subjects %}
-        <li class="subject-row">
-           <span class="code">{{ s.code }}</span>
-           <span class="name">{{ s.name }}</span>
-           <span class="class">{{ s.school_class.name }}</span>
-           <span class="teacher">
-               {{ s.teacher.first_name }} {{ s.teacher.last_name }}
-           </span>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p class="empty-msg">No subjects found.</p>
-  {% endif %}
+  <input type="text" name="q"
+         placeholder="Search by subject or code…"
+         value="{{ q|default_if_none:'' }}">
 
-<!-- ---------- quick-add form ----------------------------------------- -->
+  <select name="class">
+    <option value="">All classes</option>
+    {% for c in class_choices %}
+      <option value="{{ c.id }}"
+              {% if c.id|stringformat:"s" == cls %}selected{% endif %}>
+        {{ c.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <select name="teacher">
+    <option value="">All teachers</option>
+    {% for t in teacher_choices %}
+      <option value="{{ t.id }}"
+              {% if t.id|stringformat:"s" == t_id %}selected{% endif %}>
+        {{ t.first_name }} {{ t.last_name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Filter</button>
+</form>
+
+
+<!-- ========== Subject list ========================================= -->
+{% if subjects %}
+  <ul class="class-list">
+    {% for s in subjects %}
+      <li class="class-row">
+        <div class="class-badge">{{ forloop.counter }}</div>
+
+        <div class="class-meta">
+          <div class="name">{{ s.name }}</div>
+          <div class="info">
+            {{ s.code }} — {{ s.school_class.name }} |
+            {{ s.teacher.full_name }}
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <a class="edit-link"   href="{% url 'academics:subject_edit' s.pk %}">✎</a>
+          <a class="delete-link" href="{% url 'academics:subject_delete' s.pk %}">🗑</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-msg">No subjects found.</p>
+{% endif %}
+
+
+<!-- ========== Quick-add form ======================================= -->
 <h2 class="section-title">Add a subject</h2>
 <form method="post" class="class-form">
   {% csrf_token %}

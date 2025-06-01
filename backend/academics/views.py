@@ -160,48 +160,42 @@ def year_delete(request, pk):
 #                        SUBJECT   LIST  / ADD
 # ----------------------------------------------------------------------
 @login_required
-@login_required
 @permission_required("academics.view_subject", raise_exception=True)
 def subject_list(request):
-    """Search & filter Subjects / Courses."""
-    qs = (
-        Subject.objects
-               .select_related("school_class", "teacher")
-               .order_by("name")
-    )
+    """Filter / search subjects and inline add form."""
+    qs = (Subject.objects
+          .select_related("school_class", "teacher")
+          .order_by("name"))
 
-    # ------- keyword search (name OR code) ---------------
-    q = request.GET.get("q", "").strip()
+    # ------------ filters ------------------------------------------------
+    q    = request.GET.get("q", "").strip()
+    cls  = request.GET.get("class")
+    t_id = request.GET.get("teacher")
+
     if q:
-        qs = qs.filter(
-            models.Q(name__icontains=q) |
-            models.Q(code__icontains=q)
-        )
-
-    # ------- class filter -------------------------------
-    cls = request.GET.get("class")
+        qs = qs.filter(models.Q(name__icontains=q) | models.Q(code__icontains=q))
     if cls:
         qs = qs.filter(school_class_id=cls)
-
-    # ------- teacher filter -----------------------------
-    t_id = request.GET.get("teacher")
     if t_id:
         qs = qs.filter(teacher_id=t_id)
 
-    # ------- lists for dropdowns ------------------------
-    class_choices   = SchoolClass.objects.only("id", "name")
-    teacher_choices = Teacher.objects.only("id", "first_name", "last_name")
+    # ------------ quick-add form ----------------------------------------
+    form = SubjectForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("academics:subject_list")
 
     return render(
         request,
         "subject_list.html",
         {
-            "subjects":        qs,
-            "q":               q,
-            "cls":             cls,
-            "t_id":            t_id,
-            "class_choices":   class_choices,
-            "teacher_choices": teacher_choices,
+            "subjects": qs,
+            "q": q,
+            "cls": cls,
+            "t_id": t_id,
+            "class_choices":   SchoolClass.objects.order_by("name"),
+            "teacher_choices": Teacher.objects.order_by("last_name"),
+            "form": form,                      #  <-- don’t forget this!
         },
     )
 
