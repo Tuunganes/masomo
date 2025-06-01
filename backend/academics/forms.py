@@ -2,6 +2,8 @@ from django import forms
 from django_flatpickr.widgets import DatePickerInput
 from django_flatpickr.schemas import FlatpickrOptions
 from .models import SchoolClass, AcademicYear
+from teachers.models import Teacher
+from academics.models import Subject 
 
 # ─── one reusable widget ──────────────────────────────────────────────────────
 date_widget = DatePickerInput(
