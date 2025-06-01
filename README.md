@@ -113,6 +113,7 @@ Masomo/masomo
 │   │   ├── settings.py
 │   │   └── urls.py
 │   |---academics/            ← Academic Year & Class
+│   │   ├── admin.py
 │   │   ├── models.py
 │   │   ├── forms.py
 │   │   ├── views.py
