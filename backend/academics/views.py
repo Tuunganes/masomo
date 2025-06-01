@@ -194,7 +194,7 @@ def subject_list(request):
 
     return render(
         request,
-        "academics/subject_list.html",
+        "subject_list.html",
         {
             "subjects":        qs,
             "q":               q,
