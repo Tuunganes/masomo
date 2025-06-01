@@ -9,6 +9,7 @@ from .forms  import SchoolClassForm, AcademicYearForm
 from academics.models import Subject
 from academics.forms import SubjectForm
 from django.db import models
+from teachers.models import Teacher # to filter teacher 
 
 # ─────────────────────────────────────────────────────────────
 # LIST + QUICK-ADD  PAGES
@@ -159,29 +160,50 @@ def year_delete(request, pk):
 #                        SUBJECT   LIST  / ADD
 # ----------------------------------------------------------------------
 @login_required
+@login_required
 @permission_required("academics.view_subject", raise_exception=True)
 def subject_list(request):
-    qs = Subject.objects.select_related("school_class", "teacher")
-    q  = request.GET.get("q", "").strip()
+    """Search & filter Subjects / Courses."""
+    qs = (
+        Subject.objects
+               .select_related("school_class", "teacher")
+               .order_by("name")
+    )
+
+    # ------- keyword search (name OR code) ---------------
+    q = request.GET.get("q", "").strip()
     if q:
         qs = qs.filter(
-            models.Q(code__icontains=q) |
             models.Q(name__icontains=q) |
-            models.Q(school_class__name__icontains=q) |
-            models.Q(teacher__last_name__icontains=q)
+            models.Q(code__icontains=q)
         )
 
-    form = SubjectForm(request.POST or None)
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        return redirect("academics:subject_list")
+    # ------- class filter -------------------------------
+    cls = request.GET.get("class")
+    if cls:
+        qs = qs.filter(school_class_id=cls)
 
-    return render(request, "subject_list.html", {
-        "subjects": qs.order_by("code"),
-        "form":     form,
-        "q":        q,
-    })
+    # ------- teacher filter -----------------------------
+    t_id = request.GET.get("teacher")
+    if t_id:
+        qs = qs.filter(teacher_id=t_id)
 
+    # ------- lists for dropdowns ------------------------
+    class_choices   = SchoolClass.objects.only("id", "name")
+    teacher_choices = Teacher.objects.only("id", "first_name", "last_name")
+
+    return render(
+        request,
+        "academics/subject_list.html",
+        {
+            "subjects":        qs,
+            "q":               q,
+            "cls":             cls,
+            "t_id":            t_id,
+            "class_choices":   class_choices,
+            "teacher_choices": teacher_choices,
+        },
+    )
 
 # ----------------------------------------------------------------------
 #                  SUBJECT  EDIT   /   DELETE

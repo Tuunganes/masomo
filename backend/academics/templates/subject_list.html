@@ -13,7 +13,7 @@
          value="{{ request.GET.q|default_if_none:'' }}">
   <select name="class">
       <option value="">All subject</option>
-      {% for c in class_choices %}
+      {% for c in subject_choices %}
         <option value="{{ c.id }}"
                 {% if c.id|stringformat:"s" == request.GET.class %}selected{% endif %}>
             {{ c.name }}
