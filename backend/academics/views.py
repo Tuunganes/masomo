@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q
 from django.db.models import ProtectedError
-
 from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
-
+from academics.models import Subject
+from academics.models import SubjectForm
 
 # ─────────────────────────────────────────────────────────────
 # LIST + QUICK-ADD  PAGES
@@ -152,3 +152,56 @@ def year_delete(request, pk):
 
     # ─── initial GET: regular confirmation page ────────────────────────
     return render(request, "year_delete_confirm.html", {"obj": year})
+
+
+# ----------------------------------------------------------------------
+#                        SUBJECT   LIST  / ADD
+# ----------------------------------------------------------------------
+@login_required
+@permission_required("academics.view_subject", raise_exception=True)
+def subject_list(request):
+    qs = Subject.objects.select_related("school_class", "teacher")
+    q  = request.GET.get("q", "").strip()
+    if q:
+        qs = qs.filter(
+            models.Q(code__icontains=q) |
+            models.Q(name__icontains=q) |
+            models.Q(school_class__name__icontains=q) |
+            models.Q(teacher__last_name__icontains=q)
+        )
+
+    form = SubjectForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("academics:subject_list")
+
+    return render(request, "academics/subject_list.html", {
+        "subjects": qs.order_by("code"),
+        "form":     form,
+        "q":        q,
+    })
+
+
+# ----------------------------------------------------------------------
+#                  SUBJECT  EDIT   /   DELETE
+# ----------------------------------------------------------------------
+@login_required
+@permission_required("academics.change_subject", raise_exception=True)
+def subject_edit(request, pk):
+    subj = get_object_or_404(Subject, pk=pk)
+    form = SubjectForm(request.POST or None, instance=subj)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("academics:subject_list")
+    return render(request, "academics/subject_edit.html", {"form": form, "obj": subj})
+
+
+@login_required
+@permission_required("academics.delete_subject", raise_exception=True)
+@require_http_methods(["GET", "POST"])
+def subject_delete(request, pk):
+    subj = get_object_or_404(Subject, pk=pk)
+    if request.method == "POST":
+        subj.delete()
+        return redirect("academics:subject_list")
+    return render(request, "academics/subject_delete_confirm.html", {"obj": subj})
