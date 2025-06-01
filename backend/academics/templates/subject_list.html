@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Subjects{% endblock %}
+{% block header_title %}Subjects{% endblock %}
+
+{% block content %}
+
+<form class="class-search" method="get">
+  <input type="text" name="q" placeholder="Search code, name, teacher…"
+         value="{{ q|default_if_none:'' }}">
+  <button type="submit">Search</button>
+</form>
+
+{% if subjects %}
+  <ul class="subject-list">
+    {% for s in subjects %}
+      <li class="subject-row">
+        <div class="subject-code">{{ s.code }}</div>
+        <div class="subject-meta">
+          <div class="name">{{ s.name }}</div>
+          <div class="info">
+            {{ s.school_class.name }} &nbsp;·&nbsp;
+            {% if s.teacher %} {{ s.teacher.full_name }} {% else %}<em>Unassigned</em>{% endif %}
+          </div>
+        </div>
+        <div class="row-actions">
+          <a href="{% url 'academics:subject_edit' s.pk %}">Edit</a> |
+          <a href="{% url 'academics:subject_delete' s.pk %}">Delete</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty-msg">No subjects found.</p>
+{% endif %}
+
+<h2 class="section-title">Add a Subject</h2>
+<form method="post" class="class-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div class="form-grid">
+      <div>{{ form.code.label_tag }}{{ form.code }}{{ form.code.errors }}</div>
+      <div>{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}</div>
+      <div>{{ form.school_class.label_tag }}{{ form.school_class }}</div>
+      <div>{{ form.teacher.label_tag }}{{ form.teacher }}</div>
+  </div>
+
+  <button type="submit" class="btn-primary">Save</button>
+</form>
+
+{% endblock %}
