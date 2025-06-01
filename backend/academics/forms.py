@@ -1,7 +1,7 @@
 from django import forms
 from django_flatpickr.widgets import DatePickerInput
 from django_flatpickr.schemas import FlatpickrOptions
-from .models import SchoolClass, AcademicYear
+from .models import SchoolClass, AcademicYear, Term
 from teachers.models import Teacher
 from academics.models import Subject 
 
@@ -37,6 +37,14 @@ class AcademicYearForm(forms.ModelForm):
         model  = AcademicYear
         fields = ["name", "start_date", "end_date", "is_current"]
         widgets = {"start_date": _date, "end_date": _date}
+
+class TermForm(forms.ModelForm):
+    class Meta:
+        model  = Term
+        fields = ["academic_year", "name", "start_date", "end_date", "is_current"]
+        widgets = {"start_date": _date, "end_date": _date}
+
+
 class SubjectForm(forms.ModelForm):
     class Meta:
         model  = Subject
