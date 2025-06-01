@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms / Semesters{% endblock %}
+{% block header_title %}Terms / Semesters{% endblock %}
+
+{% block content %}
+
+<!-- ——— Filter bar ——— -->
+<form class="class-search" method="get">
+  <select name="year">
+      <option value="">All years</option>
+      {% for y in year_choices %}
+        <option value="{{ y.id }}"
+                {% if y.id|stringformat:"s" == year_id %}selected{% endif %}>
+            {{ y.name }}
+        </option>
+      {% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+<!-- ——— Term table ——— -->
+{% if terms %}
+<table class="year-table">
+  <thead>
+     <tr><th>Name</th><th>Year</th><th>Start</th><th>End</th><th class="center">Current</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for t in terms %}
+      <tr>
+        <td>{{ t.name }}</td>
+        <td>{{ t.academic_year.name }}</td>
+        <td>{{ t.start_date|date:"M j, Y" }}</td>
+        <td>{{ t.end_date|date:"M j, Y" }}</td>
+        <td class="center">{% if t.is_current %}✔{% endif %}</td>
+        <td class="row-actions">
+            <a href="{% url 'academics:term_edit' t.pk %}">✎</a>
+            <a href="{% url 'academics:term_delete' t.pk %}">🗑</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p class="empty-msg">No terms yet.</p>
+{% endif %}
+
+<!-- ——— Quick-add form ——— -->
+<h2 class="section-title">Add a term</h2>
+<form method="post" class="year-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="form-grid">
+     <div>{{ form.academic_year.label_tag }}{{ form.academic_year }}{{ form.academic_year.errors }}</div>
+     <div>{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}</div>
+     <div>{{ form.start_date.label_tag }}{{ form.start_date }}{{ form.start_date.errors }}</div>
+     <div>{{ form.end_date.label_tag }}{{ form.end_date }}{{ form.end_date.errors }}</div>
+     <div class="full-row">{{ form.is_current }} {{ form.is_current.label_tag }}</div>
+  </div>
+  <button class="btn-primary" type="submit">Save</button>
+</form>
+{% endblock %}
