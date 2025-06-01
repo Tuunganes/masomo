@@ -6,27 +6,40 @@
 
 {% block content %}
 
+<!-- ---------- search / filter bar ------------------------------------ -->
 <form class="class-search" method="get">
-  <input type="text" name="q" placeholder="Search code, name, teacher…"
-         value="{{ q|default_if_none:'' }}">
+  <input type="text" name="q"
+         placeholder="Search subject…"
+         value="{{ request.GET.q|default_if_none:'' }}">
+  <select name="class">
+      <option value="">All classes</option>
+      {% for c in class_choices %}
+        <option value="{{ c.id }}"
+                {% if c.id|stringformat:"s" == request.GET.class %}selected{% endif %}>
+            {{ c.name }}
+        </option>
+      {% endfor %}
+  </select>
   <button type="submit">Search</button>
 </form>
 
+
+<!-- ---------- subject list ------------------------------------------- -->
 {% if subjects %}
-  <ul class="subject-list">
+  <ul class="class-list">
     {% for s in subjects %}
-      <li class="subject-row">
-        <div class="subject-code">{{ s.code }}</div>
-        <div class="subject-meta">
+      <li class="class-row">
+        <div class="class-badge">{{ forloop.counter }}</div>
+        <div class="class-meta">
           <div class="name">{{ s.name }}</div>
           <div class="info">
-            {{ s.school_class.name }} &nbsp;·&nbsp;
-            {% if s.teacher %} {{ s.teacher.full_name }} {% else %}<em>Unassigned</em>{% endif %}
+            {{ s.code }} — {{ s.school_class.name }} |
+            {{ s.teacher.full_name }}
           </div>
         </div>
         <div class="row-actions">
-          <a href="{% url 'academics:subject_edit' s.pk %}">Edit</a> |
-          <a href="{% url 'academics:subject_delete' s.pk %}">Delete</a>
+          <a class="edit-link"   href="{% url 'academics:subject_edit' s.pk %}">✎</a>
+          <a class="delete-link" href="{% url 'academics:subject_delete' s.pk %}">🗑</a>
         </div>
       </li>
     {% endfor %}
@@ -35,16 +48,33 @@
   <p class="empty-msg">No subjects found.</p>
 {% endif %}
 
-<h2 class="section-title">Add a Subject</h2>
+
+<!-- ---------- quick-add form ----------------------------------------- -->
+<h2 class="section-title">Add a subject</h2>
 <form method="post" class="class-form">
   {% csrf_token %}
   {{ form.non_field_errors }}
 
   <div class="form-grid">
-      <div>{{ form.code.label_tag }}{{ form.code }}{{ form.code.errors }}</div>
-      <div>{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}</div>
-      <div>{{ form.school_class.label_tag }}{{ form.school_class }}</div>
-      <div>{{ form.teacher.label_tag }}{{ form.teacher }}</div>
+    <div>
+      {{ form.name.label_tag }}{{ form.name }}
+      {{ form.name.errors }}
+    </div>
+
+    <div>
+      {{ form.code.label_tag }}{{ form.code }}
+      {{ form.code.errors }}
+    </div>
+
+    <div>
+      {{ form.school_class.label_tag }}{{ form.school_class }}
+      {{ form.school_class.errors }}
+    </div>
+
+    <div>
+      {{ form.teacher.label_tag }}{{ form.teacher }}
+      {{ form.teacher.errors }}
+    </div>
   </div>
 
   <button type="submit" class="btn-primary">Save</button>

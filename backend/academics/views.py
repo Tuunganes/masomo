@@ -7,7 +7,7 @@ from django.db.models import ProtectedError
 from .models import SchoolClass, AcademicYear
 from .forms  import SchoolClassForm, AcademicYearForm
 from academics.models import Subject
-from academics.models import SubjectForm
+from academics.forms import SubjectForm
 
 # ─────────────────────────────────────────────────────────────
 # LIST + QUICK-ADD  PAGES
