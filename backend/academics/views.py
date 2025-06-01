@@ -193,7 +193,7 @@ def subject_edit(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("academics:subject_list")
-    return render(request, "academics/subject_edit.html", {"form": form, "obj": subj})
+    return render(request, "subject_edit.html", {"form": form, "obj": subj})
 
 
 @login_required
@@ -204,4 +204,4 @@ def subject_delete(request, pk):
     if request.method == "POST":
         subj.delete()
         return redirect("academics:subject_list")
-    return render(request, "academics/subject_delete_confirm.html", {"obj": subj})
+    return render(request, "subject_delete_confirm.html", {"obj": subj})
