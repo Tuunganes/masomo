@@ -36,11 +36,7 @@ class AcademicYearForm(forms.ModelForm):
     class Meta:
         model  = AcademicYear
         fields = ["name", "start_date", "end_date", "is_current"]
-        widgets = {
-            "start_date": date_widget,
-            "end_date":   date_widget,
-        }
-
+        widgets = {"start_date": _date, "end_date": _date}
 class SubjectForm(forms.ModelForm):
     class Meta:
         model  = Subject
