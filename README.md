@@ -126,6 +126,8 @@ Masomo/masomo
 │   │       ├── year_list.html
 │   │       ├── year_edit.html
 │   │       └── year_delete_confirm.html
+│   │       └── subject_delete_confirm.html
+│   │       └── subject_edit.html
 │   ├── students
 │   │   ├── migrations/
 │   │   ├── templates
