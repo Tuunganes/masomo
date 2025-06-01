@@ -7,7 +7,7 @@ from .models import Teacher
 
 date_widget = DatePickerInput(
     options=FlatpickrOptions(
-        altFormat='F j, Y',
+        altFormat='j F, Y',
         allowInput=True,
         maxDate='today',
     )

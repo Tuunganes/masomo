@@ -11,7 +11,7 @@ from .models import Student
 # ──────────────────────────────────────────────────────────
 date_widget = DatePickerInput(
     options=FlatpickrOptions(
-        altFormat='F j, Y',    # human-readable
+        altFormat='j F, Y',    # human-readable
         allowInput=True,
         maxDate='today',
     )

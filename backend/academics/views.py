@@ -246,7 +246,7 @@ def term_list(request):
         form.save()
         return redirect("academics:term_list")
 
-    return render(request, "academics/term_list.html", {
+    return render(request, "term_list.html", {
         "terms": qs,
         "form":  form,
         "year_choices": AcademicYear.objects.only("id", "name"),
@@ -264,7 +264,7 @@ def term_edit(request, pk):
             Term.objects.exclude(pk=term.pk).update(is_current=False)
         form.save()
         return redirect("academics:term_list")
-    return render(request, "academics/term_edit.html", {"form": form, "obj": term})
+    return render(request, "term_edit.html", {"form": form, "obj": term})
 
 # ─────────────────────────  TERM DELETE  ───────────────────────────────
 @login_required
@@ -275,4 +275,4 @@ def term_delete(request, pk):
     if request.method == "POST":
         term.delete()
         return redirect("academics:term_list")
-    return render(request, "academics/term_delete_confirm.html", {"obj": term})
+    return render(request, "term_delete_confirm.html", {"obj": term})
