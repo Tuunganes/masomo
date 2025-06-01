@@ -6,7 +6,7 @@ app_name = "academics"
 urlpatterns = [
 
     # list pages
-    
+
     path("classes/", views.class_list,           name="class_list"),
     path("years/",   views.year_list,            name="year_list"),
 
@@ -24,4 +24,10 @@ urlpatterns = [
     path("subjects/", views.subject_list,   name="subject_list"),
     path("subject/<int:pk>/edit/",   views.subject_edit,   name="subject_edit"),
     path("subject/<int:pk>/delete/", views.subject_delete, name="subject_delete"),
+
+    # ---- Term CRUD ---------------------------------------------------
+
+    path("terms/",                views.term_list,   name="term_list"),
+    path("term/<int:pk>/edit/",   views.term_edit,   name="term_edit"),
+    path("term/<int:pk>/delete/", views.term_delete, name="term_delete"),
 ]
