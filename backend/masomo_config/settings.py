@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'students',  # student management app
     'teachers',  # teacher management app
     'academics',  # academic management app
+    'attendance',  # attendance management app
 ]
 
 # Template configuration
