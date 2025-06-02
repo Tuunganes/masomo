@@ -106,67 +106,92 @@
 
 ```
 Masomo/masomo
-├── backend
+Masomo/
+├── backend/
 │   ├── manage.py
 │   ├── db.sqlite3
-│   ├── masomo_config
+│   ├── masomo_config/
 │   │   ├── settings.py
 │   │   └── urls.py
-│   |---academics/            ← Academic Year & Class
+│   ├── academics/                  # Academic Year & Class management
 │   │   ├── admin.py
 │   │   ├── apps.py
-│   │   ├── models.py
 │   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── urls.py
 │   │   ├── views.py
-│   │   ├── urls.py
-│   │   └── templates/academics/
-│   │       ├── class_list.html
-│   │       ├── class_edit.html
-│   │       ├── class_delete_confirm.html
-│   │       ├── year_list.html
-│   │       ├── year_edit.html
-│   │       └── year_delete_confirm.html
-│   │       └── subject_delete_confirm.html
-│   │       └── subject_edit.html
-│   ├── students
-│   │   ├── migrations/
-│   │   ├── templates
-│   │   │   ├── student_list.html
-│   │   │   ├── add_student.html
-│   │   │   ├── student_delete_confirm.html
-│   │   │   └── student_edit.html
+│   │   └── templates/
+│   │       └── academics/
+│   │           ├── class_list.html
+│   │           ├── class_edit.html
+│   │           ├── class_delete_confirm.html
+│   │           ├── year_list.html
+│   │           ├── year_edit.html
+│   │           ├── year_delete_confirm.html
+│   │           ├── subject_edit.html
+│   │           └── subject_delete_confirm.html
+│   ├── attendance/                 # Attendance tracking
+│   │   ├── admin.py
+│   │   ├── apps.py
 │   │   ├── forms.py
 │   │   ├── models.py
 │   │   ├── urls.py
-│   │   └── views.py
-│   └── teachers
-│       ├── migrations/
-│       ├── templates/
-│       │   └── teachers/
-│       │       ├── teacher_list.html
-│       │       ├── add_teacher.html
-│       │       ├── teacher_detail.html
-│       │       ├── teacher_edit.html
-│       │       └── teacher_delete_confirm.html
+│   │   ├── views.py
+│   │   ├── tests.py
+│   │   ├── migrations/
+│   │   │   └── __init__.py
+│   │   └── templates/
+│   │       └── attendance/
+│   │           ├── attendance_mark.html
+│   │           ├── attendance_overview.html
+│   │           └── attendance_select.html
+│   ├── students/                   # Student management
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── forms.py
+│   │   ├── models.py
+│   │   ├── urls.py
+│   │   ├── views.py
+│   │   ├── migrations/
+│   │   │   └── __init__.py
+│   │   └── templates/
+│   │       └── students/
+│   │           ├── student_list.html
+│   │           ├── add_student.html
+│   │           ├── student_edit.html
+│   │           └── student_delete_confirm.html
+│   └── teachers/                   # Teacher management
+│       ├── admin.py
+│       ├── apps.py
 │       ├── forms.py
 │       ├── models.py
 │       ├── urls.py
-│       └── views.py
-├── frontend
-│   ├── css/styles.css
-│   ├── js/scripts.js
-│   └── templates
+│       ├── views.py
+│       ├── migrations/
+│       │   └── __init__.py
+│       └── templates/
+│           └── teachers/
+│               ├── teacher_list.html
+│               ├── add_teacher.html
+│               ├── teacher_detail.html
+│               ├── teacher_edit.html
+│               └── teacher_delete_confirm.html
+├── frontend/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── scripts.js
+│   └── templates/
 │       ├── base.html
 │       ├── Gestionduneecole.html
 │       ├── index.html
 │       ├── login.html
-│       ├── student_detail.html
-│       ├── student_edit.html
-│       └── student_list.html
-├── .gitignore
+│       └── 
 ├── media/
+├── .gitignore
 ├── package.json
 └── requirements.txt
+
 
 ```
 
