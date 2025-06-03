@@ -11,3 +11,10 @@
         <input type="text" id="date" name="date" value="{{ date|default:'' }}">
         <button type="submit">Filter</button>
       </form>
+      <ul class="attendance-list">
+        {% for att in attendances %}
+          <li class="attendance-row">
+            <span class="att-date">{{ att.date|date:"M j, Y" }}</span> –
+            <span class="att-name">{{ att.student.full_name }}</span> –
+            <span class="att-status">{{ att.get_status_display }}</span>
+            <span class="row-actions">
