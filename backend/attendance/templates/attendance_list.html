@@ -26,3 +26,8 @@
               <li class="empty-msg">No attendance records.</li>
             {% endfor %}
           </ul>
+
+          <div class="add-link">
+            <a href="{% url 'attendance:attendance_mark' %}">➕ Mark New Attendance</a>
+          </div>
+        </section>
