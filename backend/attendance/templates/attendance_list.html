@@ -21,3 +21,8 @@
                 <a href="{% url 'attendance:attendance_edit' att.pk %}">✎</a>
                 <a href="{% url 'attendance:attendance_delete' att.pk %}">🗑</a>
               </span>
+            </li>
+            {% empty %}
+              <li class="empty-msg">No attendance records.</li>
+            {% endfor %}
+          </ul>
