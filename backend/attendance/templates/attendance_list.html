@@ -6,3 +6,8 @@
 
 {% block content %}
   <section>
+    <form method="get" class="filter-bar">
+        <label for="date">Filter by date:</label>
+        <input type="text" id="date" name="date" value="{{ date|default:'' }}">
+        <button type="submit">Filter</button>
+      </form>
