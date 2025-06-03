@@ -3,3 +3,10 @@
 
 {% block title %}Mark Attendance{% endblock %}
 {% block header_title %}Mark Attendance{% endblock %}
+
+{% block content %}
+  <section class="attendance-form-container">
+    <h2>New Attendance Record</h2>
+    <form method="post" class="attendance-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
