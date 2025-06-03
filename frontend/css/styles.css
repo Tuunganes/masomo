@@ -365,3 +365,43 @@
 }
 .subject-search input,
 .subject-search select { padding: .35rem .5rem; }
+
+/* ====== Attendance list rows ====== */
+.attendance‐row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .attendance‐row:last-child {
+    border-bottom: none;
+  }
+  
+  .attendance‐row .att-date {
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  
+  .attendance‐row .att-name {
+    flex: 1 1 auto;
+    font-weight: 600;
+  }
+  
+  .attendance‐row .att-status {
+    font-size: 0.875rem;
+    color: #555;
+  }
+  
+  .attendance‐row .row-actions a {
+    margin-left: 0.5rem;
+    text-decoration: none;
+  }
+  
+  .attendance‐list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  
