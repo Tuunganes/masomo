@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cannot Delete{% endblock %}
+{% block header_title %}Cannot Delete{% endblock %}
+
+{% block content %}
+  <section class="confirm-card">
+    <p>
+      This attendance record cannot be deleted because it is
+      <em>protected</em> or needed for historical reports.
+    </p>
+    <p>
+      <strong>{{ att.student.full_name }} – {{ att.date|date:"F j, Y" }}</strong>
+    </p>
+    <a href="{% url 'attendance:attendance_list' %}" class="btn-link">Back to Attendance List</a>
+  </section>
+{% endblock %}
