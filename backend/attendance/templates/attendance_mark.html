@@ -22,4 +22,23 @@
             {{ form.date }}
             {{ form.date.errors }}
           </div>
+          <div>
+            {{ form.status.label_tag }}<br>
+            {{ form.status }}
+            {{ form.status.errors }}
+          </div>
   
+          <div>
+            {{ form.note.label_tag }}<br>
+            {{ form.note }}
+            {{ form.note.errors }}
+          </div>
+        </div>
+  
+        <button type="submit" class="btn-primary">Save</button>
+        <a href="{% url 'attendance:attendance_list' %}" class="btn-link">Cancel</a>
+      </form>
+    </section>
+  
+    {{ form.media }}
+  {% endblock %}
