@@ -10,3 +10,10 @@
     <form method="post" class="attendance-form">
       {% csrf_token %}
       {{ form.non_field_errors }}
+
+      <div class="form-grid">
+        <div>
+          {{ form.student.label_tag }}<br>
+          {{ form.student }}
+          {{ form.student.errors }}
+        </div>
