@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Attendance{% endblock %}
+{% block header_title %}Delete Attendance{% endblock %}
+
+{% block content %}
+  <section class="confirm-card">
+    <p>
+      Really delete the attendance for<br>
+      <strong>{{ att.student.full_name }}</strong> on
+      <strong>{{ att.date|date:"F j, Y" }}</strong>?
+    </p>
+    <form method="post" class="confirm-actions">
+      {% csrf_token %}
+      <button type="submit" class="btn-danger">Yes, delete</button>
+      <a href="{% url 'attendance:attendance_list' %}" class="btn-link">Cancel</a>
+    </form>
+  </section>
+{% endblock %}
