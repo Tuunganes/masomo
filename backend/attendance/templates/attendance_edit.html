@@ -5,42 +5,43 @@
 {% block header_title %}Edit Attendance{% endblock %}
 
 {% block content %}
-  <section class="attendance-form-container">
-    <h2>Edit: {{ att.student.full_name }} on {{ att.date|date:"M j, Y" }}</h2>
-    <form method="post" class="attendance-form">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+<section class="attendance-edit-container">
+  <form method="post" class="attendance-edit-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
 
-      <div class="form-grid">
-        <div>
-          {{ form.student.label_tag }}<br>
-          {{ form.student }}
-          {{ form.student.errors }}
-        </div>
+    <div>
+      {{ form.student.label_tag }}<br>
+      {{ form.student }}{{ form.student.errors }}
+    </div>
+    <div>
+      {{ form.date.label_tag }}<br>
+      {{ form.date }}{{ form.date.errors }}
+    </div>
+    <div>
+      {{ form.status.label_tag }}<br>
+      {{ form.status }}{{ form.status.errors }}
+    </div>
+    <div>
+      {{ form.marked_by.label_tag }}<br>
+      {{ form.marked_by }}{{ form.marked_by.errors }}
+    </div>
 
-        <div>
-          {{ form.date.label_tag }}<br>
-          {{ form.date }}
-          {{ form.date.errors }}
-        </div>
+    <button type="submit" class="btn-primary">Save</button>
+    <a href="{% url 'attendance:attendance_overview' %}" class="btn-link">Cancel</a>
+  </form>
+</section>
 
-        <div>
-          {{ form.status.label_tag }}<br>
-          {{ form.status }}
-          {{ form.status.errors }}
-        </div>
+{{ form.media }}
 
-        <div>
-          {{ form.note.label_tag }}<br>
-          {{ form.note }}
-          {{ form.note.errors }}
-        </div>
-      </div>
-
-      <button type="submit" class="btn-primary">Save changes</button>
-      <a href="{% url 'attendance:attendance_list' %}" class="btn-link">Back to list</a>
-    </form>
-  </section>
-
-  {{ form.media }}
+<!-- Flatpickr for the date -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    flatpickr("input[name='date']", {
+      altFormat: "F j, Y",
+      allowInput: true
+    });
+  });
+</script>
 {% endblock %}
