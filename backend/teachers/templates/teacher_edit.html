@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Edit: {{ teacher.full_name }}{% endblock %}
-{% block header_title %}{% endblock %}
+{% block title %}Edit Teacher: {{ obj.full_name }}{% endblock %}
+{% block header_title %}Edit Teacher{% endblock %}
 
 {% block content %}
   <div class="form-card">
@@ -12,29 +12,35 @@
       {% csrf_token %}
       {{ form.non_field_errors }}
 
-      <label>Employee&nbsp;ID: {{ form.employee_id }}</label>
-      <label>First&nbsp;name: {{ form.first_name }}</label>
-      <label>Last&nbsp;name: {{ form.last_name }}</label>
-      <label>Gender: {{ form.gender }}</label>
-      <label>Date&nbsp;of&nbsp;Birth: {{ form.date_of_birth }}</label>
-      <label>Nationality: {{ form.nationality }}</label>
+      {# —–– Drop‐down for selecting/toggling the User account ––– #}
+      <label class="grid-span-2">
+        User account:<br>
+        {{ form.user }}
+        {{ form.user.errors }}
+      </label>
 
-      <label class="grid-span-2">Address: {{ form.address }}</label>
+      <label>Employee ID:<br> {{ form.employee_id }}</label>
+      <label>First name:<br>   {{ form.first_name }}</label>
+      <label>Last name:<br>    {{ form.last_name }}</label>
+      <label>Gender:<br>       {{ form.gender }}</label>
+      <label>Date of Birth:<br>{{ form.date_of_birth }}</label>
+      <label>Nationality:<br>  {{ form.nationality }}</label>
 
-      <label>Phone: {{ form.phone }}</label>
-      <label>Email: {{ form.email }}</label>
-      <label>Emergency&nbsp;Contact: {{ form.emergency_contact }}</label>
-      <label>Subject: {{ form.subject }}</label>
+      <label class="grid-span-2">Address:<br>  {{ form.address }}</label>
 
-      <label class="grid-span-2">Qualifications: {{ form.qualifications }}</label>
+      <label>Phone:<br>         {{ form.phone }}</label>
+      <label>Email:<br>         {{ form.email }}</label>
+      <label>Emergency Contact:<br> {{ form.emergency_contact }}</label>
+      <label>Subject:<br>       {{ form.subject }}</label>
 
-      <label>Hire date: {{ form.hire_date }}</label>
-      <label>Status: {{ form.status }}</label>
+      <label class="grid-span-2">Qualifications:<br> {{ form.qualifications }}</label>
 
-      <label class="grid-span-2">Profile&nbsp;photo&nbsp;(jpg/png ≤ 2 MB): {{ form.photo }}</label>
+      <label>Hire date:<br>      {{ form.hire_date }}</label>
+      <label>Status:<br>        {{ form.status }}</label>
 
-      <button class="btn-primary grid-span-2">Save&nbsp;Changes</button>
-      <a href="{% url 'teachers:teacher_detail' teacher.slug %}" class="text-link grid-span-2" style="text-align:center;">Cancel</a>
+      <label class="grid-span-2">Profile photo (jpg/png ≤ 2 MB):<br> {{ form.photo }}</label>
+
+      <button class="btn-primary grid-span-2">Save</button>
     </form>
 
     {{ form.media }}
