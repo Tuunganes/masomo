@@ -14,4 +14,6 @@ urlpatterns = [
 
     # Admin overview page
     path("overview/", views.attendance_overview, name="attendance_overview"),
+
+    
 ]
