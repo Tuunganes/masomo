@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Select Date{% endblock %}
-{% block header_title %}Select Date to Mark Attendance{% endblock %}
+{% block title %}Select Class & Date{% endblock %}
+{% block header_title %}Select Class & Date{% endblock %}
 
 {% block content %}
-  <section class="attendance‐select‐container">
-    <h2>Choose a Date</h2>
-    <form method="post" class="attendance‐select‐form">
-      {% csrf_token %}
-      <div>
-        <label for="date">Date:</label><br>
-        <input type="text" name="date" id="date">
-      </div>
-      <button type="submit" class="btn-primary">Next</button>
-    </form>
-  </section>
+<section class="attendance-select-container">
+  <form method="post" class="attendance-select-form">
+    {% csrf_token %}
+    <div>
+      <label for="school_class">Class:</label><br>
+      <select name="school_class" id="school_class">
+        <option value="">-- Select class --</option>
+        {% for cls in classes %}
+          <option value="{{ cls.id }}">{{ cls.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="date">Date:</label><br>
+      <input type="text" name="date" id="date" value="{{ today }}">
+    </div>
+    <button type="submit" class="btn-primary">Next</button>
+  </form>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      flatpickr("#date", {
-        altFormat: "F j, Y",
-        allowInput: true,
-        maxDate: "today"
-      });
+<!-- Flatpickr for the date field -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    flatpickr("#date", {
+      altFormat: "F j, Y",
+      allowInput: true,
+      maxDate: "today"
     });
-  </script>
+  });
+</script>
 {% endblock %}
