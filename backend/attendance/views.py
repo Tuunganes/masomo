@@ -134,7 +134,7 @@ def attendance_overview(request):
 
     class_choices = SchoolClass.objects.only("id", "name").order_by("name")
 
-    return render(request, "attendance_overview.html", {
+    return render(request, "attendance_list.html", {
         "records":       qs,
         "class_choices": class_choices,
         "filter_class":  filter_class or "",

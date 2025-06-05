@@ -16,6 +16,6 @@ urlpatterns = [
     path("overview/", views.attendance_overview, name="attendance_overview"),
 
     # optional edit/delete endpoints:
-    path("attendance/<int:pk>/edit/",   views.attendance_edit,   name="attendance_edit"),
-    path("attendance/<int:pk>/delete/", views.attendance_delete, name="attendance_delete"),
+    #path("attendance/<int:pk>/edit/",   views.attendance_edit,   name="attendance_edit"),
+    #path("attendance/<int:pk>/delete/", views.attendance_delete, name="attendance_delete"),
 ]
