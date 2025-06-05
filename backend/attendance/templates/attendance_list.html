@@ -1,36 +1,74 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Attendance Records{% endblock %}
-{% block header_title %}Attendance{% endblock %}
+{% block title %}Attendance Overview{% endblock %}
+{% block header_title %}Attendance Overview{% endblock %}
 
 {% block content %}
-  <section>
-    <form method="get" class="filter-bar">
-        <label for="date">Filter by date:</label>
-        <input type="text" id="date" name="date" value="{{ date|default:'' }}">
-        <button type="submit">Filter</button>
-      </form>
-      <ul class="attendance-list">
-        {% for att in attendances %}
-          <li class="attendance-row">
-            <span class="att-date">{{ att.date|date:"M j, Y" }}</span> –
-            <span class="att-name">{{ att.student.full_name }}</span> –
-            <span class="att-status">{{ att.get_status_display }}</span>
-            <span class="row-actions">
-                <a href="{% url 'attendance:attendance_edit' att.pk %}">✎</a>
-                <a href="{% url 'attendance:attendance_delete' att.pk %}">🗑</a>
-              </span>
-            </li>
-            {% empty %}
-              <li class="empty-msg">No attendance records.</li>
-            {% endfor %}
-          </ul>
+<section class="attendance-overview-container">
+  <form method="get" class="attendance-overview-filter">
+    <div>
+      <label for="class">Class:</label>
+      <select name="class" id="class">
+        <option value="">All classes</option>
+        {% for cls in class_choices %}
+          <option value="{{ cls.id }}"
+            {% if filter_class == cls.id|stringformat:"s" %}selected{% endif %}>
+            {{ cls.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
 
-          <div class="add-link">
-            <a href="{% url 'attendance:attendance_mark' %}">➕ Mark New Attendance</a>
-          </div>
-        </section>
-        {{ form.media }}
-    {% endblock %}
-        
+    <div>
+      <label for="date">Date:</label>
+      <input type="text" name="date" id="date" value="{{ filter_date }}">
+    </div>
+
+    <button type="submit" class="btn-primary">Filter</button>
+  </form>
+
+  <table class="attendance-overview-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Student</th>
+        <th>Class</th>
+        <th>Status</th>
+        <th>Marked By</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rec in records %}
+        <tr>
+          <td>{{ rec.date|date:"M j, Y" }}</td>
+          <td>{{ rec.student.full_name }}</td>
+          <td>{{ rec.student.school_class.name }}</td>
+          <td>{{ rec.get_status_display }}</td>
+          <td>{{ rec.marked_by.full_name if rec.marked_by else "—" }}</td>
+          <td>
+            <a href="{% url 'attendance:attendance_edit' rec.id %}">✎</a>
+            <a href="{% url 'attendance:attendance_delete' rec.id %}">🗑</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No attendance records found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<!-- Flatpickr on the date filter -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    flatpickr("#date", {
+      altFormat: "F j, Y",
+      allowInput: true
+    });
+  });
+</script>
+{% endblock %}
