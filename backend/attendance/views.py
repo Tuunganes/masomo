@@ -1,5 +1,3 @@
-# backend/attendance/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -8,12 +6,13 @@ from django.utils.timezone import now
 from django.db import models as dj_models
 
 from .models import Attendance
-from .forms  import AttendanceForm
+from .forms import AttendanceForm
 from students.models import Student
 from teachers.models import Teacher
 from academics.models import SchoolClass
 
-# ————————————————————————— VIEW: “Select Class & Date” ——————————————————
+
+# —————— “Select Class & Date” ——————
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_select(request):
@@ -22,8 +21,14 @@ def attendance_select(request):
     On POST, redirect to the same URL with ?class=ID&date=YYYY-MM-DD
     so that attendance_mark() can pick them up.
     """
+    # Step 0: ensure the logged‐in user actually has an associated Teacher record:
+    try:
+        teacher = request.user.teacher
+    except Teacher.DoesNotExist:
+        # If they are not a Teacher, forbid access.
+        return redirect("students:student_list")  # or HttpResponseForbidden(...) 
+
     # Determine which classes this teacher can mark (homeroom or subject teacher)
-    teacher = request.user.teacher
     eligible_classes = SchoolClass.objects.filter(
         dj_models.Q(main_teacher=teacher) | dj_models.Q(teachers=teacher)
     ).distinct().order_by("name")
@@ -34,13 +39,13 @@ def attendance_select(request):
         if chosen_class and chosen_date:
             return redirect(f"{request.path}?class={chosen_class}&date={chosen_date}")
 
-    return render(request, "attendance_select.html", {
+    return render(request, "attendance/attendance_select.html", {
         "classes": eligible_classes,
-        "today":   now().date().isoformat(),  # prefill with today’s date
+        "today":   now().date().isoformat(),  # prefill with today's date
     })
 
 
-# ————————————————————————— VIEW: “Mark Attendance” —————————————————————
+# —————— “Mark Attendance” ——————
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_mark(request):
@@ -56,7 +61,7 @@ def attendance_mark(request):
         return redirect("attendance:attendance_select")
 
     school_class = get_object_or_404(SchoolClass, pk=class_id)
-    teacher = request.user.teacher
+    teacher = request.user.teacher  # can now safely do this
 
     # Get all students assigned to this class, ordered by last name
     students_in_class = Student.objects.filter(
@@ -68,7 +73,7 @@ def attendance_mark(request):
         Attendance,
         form=AttendanceForm,
         extra=0,
-        can_delete=False
+        can_delete=False,
     )
 
     # Fetch any existing attendance records for these students on that date
@@ -82,7 +87,7 @@ def attendance_mark(request):
         if formset.is_valid():
             instances = formset.save(commit=False)
             for inst in instances:
-                # If it’s a new record (no pk), record which teacher marked it
+                # If it's a new record (no pk), record which teacher marked it
                 if not inst.pk:
                     inst.marked_by = teacher
                 inst.save()
@@ -103,7 +108,7 @@ def attendance_mark(request):
 
         formset = AttendanceFormSet(queryset=existing_qs, initial=initial_data)
 
-    return render(request, "attendance_mark.html", {
+    return render(request, "attendance/attendance_mark.html", {
         "school_class": school_class,
         "date_str":     date_str,
         "formset":      formset,
@@ -111,7 +116,7 @@ def attendance_mark(request):
     })
 
 
-# ————————————————————————— VIEW: “Admin Overview” ——————————————————————
+# —————— “Admin Overview” ——————
 @login_required
 @permission_required("attendance.view_attendance", raise_exception=True)
 def attendance_overview(request):
@@ -134,10 +139,34 @@ def attendance_overview(request):
 
     class_choices = SchoolClass.objects.only("id", "name").order_by("name")
 
-    return render(request, "attendance_list.html", {
+    return render(request, "attendance/attendance_list.html", {
         "records":       qs,
         "class_choices": class_choices,
         "filter_class":  filter_class or "",
         "filter_date":   filter_date or "",
         "today":         now().date().isoformat(),
     })
+
+
+# —————— “Edit a single attendance record” ——————
+@login_required
+@permission_required("attendance.change_attendance", raise_exception=True)
+def attendance_edit(request, pk):
+    rec = get_object_or_404(Attendance, pk=pk)
+    form = AttendanceForm(request.POST or None, instance=rec)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("attendance:attendance_overview")
+    return render(request, "attendance/attendance_edit.html", {"form": form, "obj": rec})
+
+
+# —————— “Delete a single attendance record” ——————
+@login_required
+@permission_required("attendance.delete_attendance", raise_exception=True)
+@require_http_methods(["GET", "POST"])
+def attendance_delete(request, pk):
+    rec = get_object_or_404(Attendance, pk=pk)
+    if request.method == "POST":
+        rec.delete()
+        return redirect("attendance:attendance_overview")
+    return render(request, "attendance/attendance_delete_confirm.html", {"obj": rec})
