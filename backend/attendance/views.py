@@ -34,7 +34,7 @@ def attendance_select(request):
         if chosen_class and chosen_date:
             return redirect(f"{request.path}?class={chosen_class}&date={chosen_date}")
 
-    return render(request, "attendance/attendance_select.html", {
+    return render(request, "attendance_select.html", {
         "classes": eligible_classes,
         "today":   now().date().isoformat(),  # prefill with today’s date
     })
@@ -103,7 +103,7 @@ def attendance_mark(request):
 
         formset = AttendanceFormSet(queryset=existing_qs, initial=initial_data)
 
-    return render(request, "attendance/attendance_mark.html", {
+    return render(request, "attendance_mark.html", {
         "school_class": school_class,
         "date_str":     date_str,
         "formset":      formset,
@@ -134,7 +134,7 @@ def attendance_overview(request):
 
     class_choices = SchoolClass.objects.only("id", "name").order_by("name")
 
-    return render(request, "attendance/attendance_overview.html", {
+    return render(request, "attendance_overview.html", {
         "records":       qs,
         "class_choices": class_choices,
         "filter_class":  filter_class or "",
