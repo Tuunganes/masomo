@@ -75,7 +75,9 @@
    ```
    ```
    rm -rf students/migrations
-
+   rm -rf teachers/migrations
+   rm -rf academics/migrations
+   rm -rf attendance/migrations
    ``` 
    just in case you want to delete something
 
