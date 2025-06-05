@@ -2,43 +2,42 @@
 {% load static %}
 
 {% block title %}Mark Attendance{% endblock %}
-{% block header_title %}Mark Attendance{% endblock %}
+{% block header_title %}Mark Attendance for {{ school_class.name }} on {{ date_str }}{% endblock %}
 
 {% block content %}
-  <section class="attendance-form-container">
-    <h2>New Attendance Record</h2>
-    <form method="post" class="attendance-form">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+<section class="attendance-mark-container">
+  <form method="post" class="attendance-mark-form">
+    {% csrf_token %}
+    {{ formset.non_form_errors }}
 
-      <div class="form-grid">
-        <div>
-          {{ form.student.label_tag }}<br>
-          {{ form.student }}
-          {{ form.student.errors }}
-        </div>
-        <div>
-            {{ form.date.label_tag }}<br>
-            {{ form.date }}
-            {{ form.date.errors }}
-          </div>
-          <div>
-            {{ form.status.label_tag }}<br>
-            {{ form.status }}
-            {{ form.status.errors }}
-          </div>
-  
-          <div>
-            {{ form.note.label_tag }}<br>
-            {{ form.note }}
-            {{ form.note.errors }}
-          </div>
-        </div>
-  
-        <button type="submit" class="btn-primary">Save</button>
-        <a href="{% url 'attendance:attendance_list' %}" class="btn-link">Cancel</a>
-      </form>
-    </section>
-  
-    {{ form.media }}
-  {% endblock %}
+    <table class="attendance-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for form in formset %}
+          <tr>
+            <td>
+              {{ form.student.value|default_if_none:"" }}
+              {{ form.student }}{{ form.student.errors }}
+            </td>
+            <td>
+              {{ form.status }}{{ form.status.errors }}
+            </td>
+          </tr>
+          {{ form.date }}        {# hidden #}
+          {{ form.marked_by }}   {# hidden #}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <button type="submit" class="btn-primary">Save</button>
+    <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
+  </form>
+</section>
+
+{{ form_media }}  {# ensure the flatpickr CSS/JS for date fields is injected #}
+{% endblock %}
