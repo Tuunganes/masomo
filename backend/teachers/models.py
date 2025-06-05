@@ -2,8 +2,17 @@
 
 from django.db import models
 from django.utils.text import slugify
+from django.conf import settings
 
 class Teacher(models.Model):
+
+    # Link each Teacher to exactly one User account
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="teacher"
+    )
+
     STATUS_CHOICES = [
         ('active',   'Active'),
         ('inactive', 'Inactive'),

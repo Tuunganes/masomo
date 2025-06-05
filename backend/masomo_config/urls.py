@@ -10,7 +10,9 @@ urlpatterns = [
     path('teachers/', include('teachers.urls', namespace='teachers')),  # Teachers under /teachers/
     path("academics/",  include("academics.urls")),  # Academics under /academics/
     #path("attendance/",  include("attendance.urls")),  # Attendance under /attendance/
-    path("attendance/", include(("attendance.urls"))),
+    #path("attendance/", include(("attendance.urls"))),
+    path('attendance/', include(('attendance.urls', 'attendance'), namespace='attendance')),
+
     path('login/',  CustomLoginView.as_view(),  name='login'),
     path('logout/', CustomLogoutView.as_view(), name='logout'),
 ]
