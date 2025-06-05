@@ -143,8 +143,10 @@ Masomo/
 │   │   └── templates/
 │   │       └── attendance/
 │   │           ├── attendance_mark.html
-│   │           ├── attendance_overview.html
+│   │           ├── attendance_list.html
 │   │           └── attendance_select.html
+│   │           └── attendance_delete_confirm.html
+│   │           └── attendance_edit.html
 │   ├── students/                   # Student management
 │   │   ├── admin.py
 │   │   ├── apps.py
@@ -152,8 +154,6 @@ Masomo/
 │   │   ├── models.py
 │   │   ├── urls.py
 │   │   ├── views.py
-│   │   ├── migrations/
-│   │   │   └── __init__.py
 │   │   └── templates/
 │   │       └── students/
 │   │           ├── student_list.html
