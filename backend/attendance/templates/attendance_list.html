@@ -28,47 +28,24 @@
     <button type="submit" class="btn-primary">Filter</button>
   </form>
 
-  <table class="attendance-overview-table">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Student</th>
-        <th>Class</th>
-        <th>Status</th>
-        <th>Marked By</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for rec in records %}
-        <tr>
-          <td>{{ rec.date|date:"M j, Y" }}</td>
-          <td>{{ rec.student.full_name }}</td>
-          <td>{{ rec.student.school_class.name }}</td>
-          <td>{{ rec.get_status_display }}</td>
-          <td>
-            {% if rec.marked_by %}
-              {{ rec.marked_by.full_name }}
-            {% else %}
-              —
-            {% endif %}
-          </td>
-          
-          <td>
-            <a href="{% url 'attendance:attendance_edit' rec.id %}">✎</a>
-            <a href="{% url 'attendance:attendance_delete' rec.id %}">🗑</a>
-          </td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="6">No attendance records found.</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <ul class="attendance-list">
+    {% for rec in records %}
+      <li class="attendance-row">
+        <span class="att-date">{{ rec.date|date:"M j, Y" }}</span>
+        <span class="att-name">{{ rec.student.full_name }}</span>
+        <span class="att-status">{{ rec.get_status_display }}</span>
+        <span class="row-actions">
+          <a href="{% url 'attendance:attendance_edit' rec.id %}">✎</a>
+          <a href="{% url 'attendance:attendance_delete' rec.id %}">🗑</a>
+        </span>
+      </li>
+    {% empty %}
+      <li>No attendance records found.</li>
+    {% endfor %}
+  </ul>
 </section>
 
-<!-- Flatpickr on the date filter -->
+<!-- Flatpickr for the date filter -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

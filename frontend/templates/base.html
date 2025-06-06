@@ -19,6 +19,7 @@
       <ul>
         <li><a href="{% url 'students:student_list' %}">Étudiants</a></li>
         <li><a href="{% url 'teachers:teacher_list' %}">Enseignants</a></li>
+        
         <li><a href="{% url 'students:gestion' %}">Gestion</a></li>
 
         {% if user.is_authenticated %}
@@ -44,6 +45,8 @@
   </footer>
 
   <!-- Site JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
   <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>
