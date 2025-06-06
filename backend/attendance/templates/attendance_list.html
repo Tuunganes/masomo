@@ -46,7 +46,14 @@
           <td>{{ rec.student.full_name }}</td>
           <td>{{ rec.student.school_class.name }}</td>
           <td>{{ rec.get_status_display }}</td>
-          <td>{{ rec.marked_by.full_name if rec.marked_by else "—" }}</td>
+          <td>
+            {% if rec.marked_by %}
+              {{ rec.marked_by.full_name }}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          
           <td>
             <a href="{% url 'attendance:attendance_edit' rec.id %}">✎</a>
             <a href="{% url 'attendance:attendance_delete' rec.id %}">🗑</a>
