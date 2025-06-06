@@ -10,6 +10,7 @@ class Attendance(models.Model):
     STATUS_CHOICES = [
         ("present",            "Present"),
         ("absent",             "Absent"),
+        ("sick",               "Sick"), 
         ("late",               "Late"),
         ("temp_exclusion",     "Temporary Exclusion"),
         ("perm_exclusion",     "Permanent Exclusion"),
