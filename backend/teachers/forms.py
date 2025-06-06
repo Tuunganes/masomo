@@ -24,7 +24,7 @@ class TeacherForm(forms.ModelForm):
         model = Teacher
         # We must include "user" here so that the form renders a <select> of existing User accounts.
         fields = [
-            'user',               # ← new
+            'user',               # ForeignKey to User model
             'employee_id',
             'first_name',
             'last_name',
