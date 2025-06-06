@@ -1,10 +1,14 @@
 # backend/teachers/forms.py
 
 from django import forms
+from django.contrib.auth import get_user_model # to get the User model
 from django_flatpickr.widgets import DatePickerInput
 from django_flatpickr.schemas import FlatpickrOptions
 from django.utils.translation import gettext_lazy as _
 from .models import Teacher
+
+
+User = get_user_model()  
 
 # Reusable Flatpickr date widget
 date_widget = DatePickerInput(
