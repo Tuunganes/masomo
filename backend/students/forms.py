@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django_flatpickr.widgets import DatePickerInput
 from django_flatpickr.schemas import FlatpickrOptions
 from .models import Student
+from academics.models import SchoolClass    
 
 # ──────────────────────────────────────────────────────────
 # Shared date-picker widget
@@ -34,7 +35,9 @@ class StudentForm(forms.ModelForm):
             "date_of_birth": date_widget,
             "enrol_date":    date_widget,
         }
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["school_class"].queryset = SchoolClass.objects.order_by("name")
 # ──────────────────────────────────────────────────────────
 # Custom login error messages
 # ──────────────────────────────────────────────────────────
