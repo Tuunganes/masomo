@@ -1,19 +1,21 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts          import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_http_methods
-from django.forms import modelformset_factory
-from django.utils.timezone import now
-from django.db import models as dj_models
-from django.urls import reverse 
+from django.views.decorators.http   import require_http_methods
+from django.forms                   import modelformset_factory
+from django.utils.timezone          import now
+from django.db                      import models as dj_models
+from django.urls                    import reverse
 
-from .models import Attendance
-from .forms import AttendanceForm
-from students.models import Student
-from teachers.models import Teacher
+from .models     import Attendance
+from .forms      import AttendanceForm
+from students.models  import Student
+from teachers.models  import Teacher
 from academics.models import SchoolClass
 
 
-# —————— “Select Class & Date” ——————
+# ————————————————————————————————————————————————————————————————
+#  “Select Class & Date”
+# ————————————————————————————————————————————————————————————————
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_select(request):
@@ -41,18 +43,24 @@ def attendance_select(request):
         chosen_class = request.POST.get("school_class")
         chosen_date  = request.POST.get("date")
         if chosen_class and chosen_date:
-            mark_url = reverse("attendance:attendance_mark")  # /attendance/mark/
+            mark_url = reverse("attendance:attendance_mark")        # /attendance/mark/
             # Jump directly to the mark-view with query-string.
             return redirect(f"{mark_url}?class={chosen_class}&date={chosen_date}")
 
     # Step 3  ——————————————————————————————————————————————
-    return render(request, "attendance_select.html", {
-        "classes": eligible_classes,
-        "today":   now().date().isoformat(),   # pre-fill date picker with “today”
-    })
+    return render(
+        request,
+        "attendance_select.html",
+        {
+            "classes": eligible_classes,
+            "today":   now().date().isoformat(),   # pre-fill date picker with “today”
+        },
+    )
 
 
-# —————— “Mark Attendance” ——————
+# ————————————————————————————————————————————————————————————————
+#  “Mark Attendance”
+# ————————————————————————————————————————————————————————————————
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_mark(request):
@@ -68,12 +76,12 @@ def attendance_mark(request):
         return redirect("attendance:attendance_select")
 
     school_class = get_object_or_404(SchoolClass, pk=class_id)
-    teacher      = request.user.teacher  # safe because view is @login_required
+    teacher      = request.user.teacher         # safe because view is @login_required
 
     # ------------------------------------------------------------------ #
     # 1.  All students that BELONG to this class
     # ------------------------------------------------------------------ #
-    students_in_class = Student.objects.filter(
+    students_qs = Student.objects.filter(
         school_class=school_class
     ).order_by("last_name", "first_name")
 
@@ -81,72 +89,84 @@ def attendance_mark(request):
     # 2.  Existing attendance rows for that date
     # ------------------------------------------------------------------ #
     existing_qs = Attendance.objects.filter(
-        student__in=students_in_class,
+        student__in=students_qs,
         date=date_str
     )
 
     # ------------------------------------------------------------------ #
-    # 3.  Build a *dynamic* form-set:
-    #     “extra” == how many students still need a fresh row
+    # 3.  Build the list of INITIAL rows that are still missing ★★ added
     # ------------------------------------------------------------------ #
-    num_missing = students_in_class.count() - existing_qs.count()   # ← NEW
+    missing_ids = students_qs.exclude(
+        id__in=existing_qs.values_list("student_id", flat=True)
+    ).values_list("id", flat=True)
+
+    initial_rows = [
+        {
+            "student":   sid,
+            "date":      date_str,
+            "status":    "present",     # default value
+            "marked_by": teacher.pk,
+        }
+        for sid in missing_ids
+    ]
+
+    # ------------------------------------------------------------------ #
+    # 4.  ONE form-set factory (extra == number of missing rows) ★★ updated
+    # ------------------------------------------------------------------ #
     AttendanceFormSet = modelformset_factory(
         Attendance,
         form       = AttendanceForm,
-        extra      = max(num_missing, 0),    # ← NEW
+        extra      = len(initial_rows),      # ← could be 0
         can_delete = False,
     )
 
     # ------------------------------------------------------------------ #
-    # 4.  POST: validate & save
+    # 5.  POST: validate & save   (always pass the SAME initial_rows) ★★ updated
     # ------------------------------------------------------------------ #
     if request.method == "POST":
-        formset = AttendanceFormSet(request.POST, queryset=existing_qs)
+        formset = AttendanceFormSet(
+            request.POST,
+            queryset=existing_qs,
+            initial = initial_rows,          # keep hidden fields alive
+        )
         if formset.is_valid():
-
-            # iterate over *every* sub-form (even those Django thinks “unchanged”)
-            for f in formset.forms:           # ← keep these three lines INDENTED!
-                obj = f.save(commit=False)    # ← build / update instance
-                if obj.pk is None:            # ← brand-new row ➜ stamp teacher
+            for f in formset.forms:          # walk every sub-form
+                if not f.cleaned_data:       # empty → skip (nothing submitted)
+                    continue
+                obj = f.save(commit=False)
+                if obj.pk is None:           # brand-new row → stamp teacher
                     obj.marked_by = teacher
-                obj.save()                    # ← finally write to DB
-
-            # no m2m fields, so no formset.save_m2m() needed
+                obj.save()
+            # no m2m, so no save_m2m()
             return redirect(request.get_full_path())
+        
+        just_saved_flag = False
 
-    # ------------------------------------------------------------------ #
-    # 5.  GET: build initial data for still-missing students
-    # ------------------------------------------------------------------ #
-    else:
-        initial_rows = []
-        present_ids  = set(existing_qs.values_list("student_id", flat=True))
-
-        for stu in students_in_class:
-            if stu.id not in present_ids:           # need a brand-new row
-                initial_rows.append({
-                    "student":   stu.pk,
-                    "date":      date_str,
-                    "status":    "present",         # default value
-                    "marked_by": teacher.pk,
-                })
-
+    else:   # GET ─ build the form-set
         formset = AttendanceFormSet(queryset=existing_qs, initial=initial_rows)
 
+        just_saved_flag   = False
 
     # ------------------------------------------------------------------ #
-    #   Render template
+    # 6.  Render template
     # ------------------------------------------------------------------ #
+    return render(
+        request,
+        "attendance_mark.html",
+        {
+            "school_class": school_class,
+            "date_str":     date_str,
+            "formset":      formset,
+            "form_media":   formset.media,   # Flatpickr JS/CSS etc.
+            "just_saved":   request.method == "POST",
+            "just_saved":   just_saved_flag,
+        },
+    )
 
-    return render(request, "attendance_mark.html", {
-        "school_class": school_class,
-        "date_str":     date_str,
-        "formset":      formset,
-        "form_media":   formset.media,  # ensuring Flatpickr JS/CSS get injected
-        "just_saved":   request.method == "POST",
-    })
 
-
-# —————— “Admin Overview” ——————
+# ————————————————————————————————————————————————————————————————
+#  “Admin Overview”
+# ————————————————————————————————————————————————————————————————
 @login_required
 @permission_required("attendance.view_attendance", raise_exception=True)
 def attendance_overview(request):
@@ -156,7 +176,7 @@ def attendance_overview(request):
     qs = Attendance.objects.select_related(
         "student__school_class",
         "marked_by",
-        "student"
+        "student",
     ).order_by("-date", "student__last_name")
 
     filter_class = request.GET.get("class")
@@ -169,20 +189,26 @@ def attendance_overview(request):
 
     class_choices = SchoolClass.objects.only("id", "name").order_by("name")
 
-    return render(request, "attendance_list.html", {
-        "records":       qs,
-        "class_choices": class_choices,
-        "filter_class":  filter_class or "",
-        "filter_date":   filter_date or "",
-        "today":         now().date().isoformat(),
-    })
+    return render(
+        request,
+        "attendance_list.html",
+        {
+            "records":       qs,
+            "class_choices": class_choices,
+            "filter_class":  filter_class or "",
+            "filter_date":   filter_date or "",
+            "today":         now().date().isoformat(),
+        },
+    )
 
 
-# —————— “Edit a single attendance record” ——————
+# ————————————————————————————————————————————————————————————————
+#  “Edit / Delete” single attendance (unchanged)
+# ————————————————————————————————————————————————————————————————
 @login_required
 @permission_required("attendance.change_attendance", raise_exception=True)
 def attendance_edit(request, pk):
-    rec = get_object_or_404(Attendance, pk=pk)
+    rec  = get_object_or_404(Attendance, pk=pk)
     form = AttendanceForm(request.POST or None, instance=rec)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -190,7 +216,6 @@ def attendance_edit(request, pk):
     return render(request, "attendance_edit.html", {"form": form, "obj": rec})
 
 
-# —————— “Delete a single attendance record” ——————
 @login_required
 @permission_required("attendance.delete_attendance", raise_exception=True)
 @require_http_methods(["GET", "POST"])

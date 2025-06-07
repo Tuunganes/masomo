@@ -11,6 +11,15 @@
 <form method="post">
   {% csrf_token %}
 
+  {# ──────────────────────────────────────────────────────────────── #}
+  {#  SHOW non-field (form-set) errors so we know why it failed  ★★   #}
+  {# ──────────────────────────────────────────────────────────────── #}
+  {% if formset.non_form_errors %}
+      <p class="alert-error">
+          {{ formset.non_form_errors }}
+      </p>
+  {% endif %}
+
   <table class="attendance-table" style="width:100%; border-collapse:collapse;">
      <thead>
         <tr>
@@ -21,18 +30,18 @@
 
      <tbody>
        {% for subform in formset.forms %}
-           {# ── each sub-form == one student row ── #}
            <tr>
               <td>
-                 {{ subform.student }}   {# hidden input #}
+                 {{ subform.student }}      {# hidden input #}
                  {% if subform.instance.pk %}
                      {{ subform.instance.student.full_name }}
                  {% else %}
-                     {# new record: use the id stored in initial #}
                      {% with sid=subform.initial.student %}
                          {{ sid|get_student_name }}
                      {% endwith %}
                  {% endif %}
+                 {# show per-row errors (if any) ★★ #}
+                 {{ subform.non_field_errors }}
               </td>
               <td>{{ subform.status }}</td>
            </tr>
@@ -41,13 +50,15 @@
        {% endfor %}
      </tbody>
   </table>
+
+  {# success banner only when we *really* saved ★★ #}
   {% if just_saved %}
-    <p class="alert-success">✓ Attendance saved.</p>
-{% endif %}
+      <p class="alert-success">✓ Attendance saved.</p>
+  {% endif %}
 
   <button class="btn-primary" style="margin-top:1rem;">Save</button>
   <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
 </form>
-    
+
 {{ form_media }}   {# Flatpickr + any other media #}
 {% endblock %}
