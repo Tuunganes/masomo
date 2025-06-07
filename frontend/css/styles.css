@@ -405,8 +405,4 @@
     text-decoration: none;
   }
   
-  /* Optional for debugging */
-  .attendance-row {
-    /* outline: 2px solid red; */
-  }
-  
+  .attendance-table th { background: #f7f7f7; text-align: left; }

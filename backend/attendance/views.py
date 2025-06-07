@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.forms import modelformset_factory
 from django.utils.timezone import now
 from django.db import models as dj_models
+from django.urls import reverse 
 
 from .models import Attendance
 from .forms import AttendanceForm
@@ -33,10 +34,12 @@ def attendance_select(request):
         dj_models.Q(main_teacher=teacher) | dj_models.Q(teachers=teacher)
     ).distinct().order_by("name")
 
+
     if request.method == "POST":
         chosen_class = request.POST.get("school_class")
         chosen_date = request.POST.get("date")
         if chosen_class and chosen_date:
+            url = reverse("attendance:attendance_mark")
             return redirect(f"{request.path}?class={chosen_class}&date={chosen_date}")
 
     return render(request, "attendance_select.html", {
