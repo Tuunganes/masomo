@@ -6,26 +6,45 @@
 
 {% block content %}
 <section class="attendance-select-container">
-  <form method="post" class="attendance-select-form">
-    {% csrf_token %}
-    <div>
-      <label for="school_class">Class:</label><br>
-      <select name="school_class" id="school_class">
-        <option value="">-- Select class --</option>
-        {% for cls in classes %}
-          <option value="{{ cls.id }}">{{ cls.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div>
-      <label for="date">Date:</label><br>
-      <input type="text" name="date" id="date" value="{{ today }}">
-    </div>
-    <button type="submit" class="btn-primary">Next</button>
-  </form>
+
+  {# ───────────── Check if the teacher actually owns / teaches a class ────────── #}
+  {% if classes %}
+      <form method="post" class="attendance-select-form">
+        {% csrf_token %}
+
+        <div>
+          <label for="school_class">Class:</label><br>
+          <select name="school_class" id="school_class" required>
+            <option value="">– Select class –</option>
+            {% for cls in classes %}
+              <option value="{{ cls.id }}">{{ cls.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label for="date">Date:</label><br>
+          <input type="text" name="date" id="date" value="{{ today }}" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Next</button>
+      </form>
+
+  {% else %}
+      <p>
+        You are not currently assigned to any class.<br>
+        Please contact the administrator if this seems incorrect.
+      </p>
+      <p>
+        <a href="{% url 'index' %}" class="btn-link">Back to dashboard</a>
+      </p>
+  {% endif %}
+
 </section>
 
 <!-- Flatpickr for the date field -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

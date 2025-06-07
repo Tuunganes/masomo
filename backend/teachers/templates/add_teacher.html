@@ -8,6 +8,12 @@
   <div class="form-card">
     <h1>Add New Teacher</h1>
 
+    {% if messages %}
+      {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
     <form method="POST" enctype="multipart/form-data" class="grid-2" novalidate>
       {% csrf_token %}
       {{ form.non_field_errors }}
@@ -16,33 +22,85 @@
       <label class="grid-span-2">
         User account:<br>
         {{ form.user }}
-        {{ form.user.errors }}
+        {% if form.user.errors %}
+          <div class="error">{{ form.user.errors }}</div>
+        {% endif %}
       </label>
       
       <label>Employee ID:<br> {{ form.employee_id }}</label>
-      <label>First name:<br>   {{ form.first_name }}</label>
-      <label>Last name:<br>    {{ form.last_name }}</label>
-      <label>Gender:<br>       {{ form.gender }}</label>
-      <label>Date of Birth:<br>{{ form.date_of_birth }}</label>
-      <label>Nationality:<br>  {{ form.nationality }}</label>
-      
+      {% if form.employee_id.errors %}
+        <div class="error">{{ form.employee_id.errors }}</div>
+      {% endif %}
 
-      {# span Address across 2 columns #}
+      <label>First name:<br> {{ form.first_name }}</label>
+      {% if form.first_name.errors %}
+        <div class="error">{{ form.first_name.errors }}</div>
+      {% endif %}
+
+      <label>Last name:<br> {{ form.last_name }}</label>
+      {% if form.last_name.errors %}
+        <div class="error">{{ form.last_name.errors }}</div>
+      {% endif %}
+
+      <label>Gender:<br> {{ form.gender }}</label>
+      {% if form.gender.errors %}
+        <div class="error">{{ form.gender.errors }}</div>
+      {% endif %}
+
+      <label>Date of Birth:<br> {{ form.date_of_birth }}</label>
+      {% if form.date_of_birth.errors %}
+        <div class="error">{{ form.date_of_birth.errors }}</div>
+      {% endif %}
+
+      <label>Nationality:<br> {{ form.nationality }}</label>
+      {% if form.nationality.errors %}
+        <div class="error">{{ form.nationality.errors }}</div>
+      {% endif %}
+
       <label class="grid-span-2">Address:<br> {{ form.address }}</label>
+      {% if form.address.errors %}
+        <div class="error">{{ form.address.errors }}</div>
+      {% endif %}
 
-      <label>Phone:<br>        {{ form.phone }}</label>
-      <label>Email:<br>        {{ form.email }}</label>
+      <label>Phone:<br> {{ form.phone }}</label>
+      {% if form.phone.errors %}
+        <div class="error">{{ form.phone.errors }}</div>
+      {% endif %}
+
+      <label>Email:<br> {{ form.email }}</label>
+      {% if form.email.errors %}
+        <div class="error">{{ form.email.errors }}</div>
+      {% endif %}
+
       <label>Emergency Contact:<br> {{ form.emergency_contact }}</label>
-      <label>Subject:<br>      {{ form.subject }}</label>
+      {% if form.emergency_contact.errors %}
+        <div class="error">{{ form.emergency_contact.errors }}</div>
+      {% endif %}
 
-      {# Qualifications textarea full width #}
+      <label>Subject:<br> {{ form.subject }}</label>
+      {% if form.subject.errors %}
+        <div class="error">{{ form.subject.errors }}</div>
+      {% endif %}
+
       <label class="grid-span-2">Qualifications:<br> {{ form.qualifications }}</label>
+      {% if form.qualifications.errors %}
+        <div class="error">{{ form.qualifications.errors }}</div>
+      {% endif %}
 
-      <label>Hire date:<br>     {{ form.hire_date }}</label>
-      <label>Status:<br>       {{ form.status }}</label>
+      <label>Hire date:<br> {{ form.hire_date }}</label>
+      {% if form.hire_date.errors %}
+        <div class="error">{{ form.hire_date.errors }}</div>
+      {% endif %}
 
-      {# Photo input full width #}
+      <label>Status:<br> {{ form.status }}</label>
+      {% if form.status.errors %}
+        <div class="error">{{ form.status.errors }}</div>
+      {% endif %}
+
       <label class="grid-span-2">Profile photo (jpg/png ≤ 2 MB):<br> {{ form.photo }}</label>
+      {% if form.photo.errors %}
+        <div class="error">{{ form.photo.errors }}</div>
+      {% endif %}
 
       <button class="btn-primary grid-span-2">Save</button>
     </form>

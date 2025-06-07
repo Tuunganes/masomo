@@ -4,6 +4,12 @@
 {% block title %}Attendance Overview{% endblock %}
 {% block header_title %}Attendance Overview{% endblock %}
 
+<p style="margin-bottom:1.2rem;">
+    <a class="btn-primary" href="{% url 'attendance:attendance_select' %}">
+        + New roll
+    </a>
+</p>
+
 {% block content %}
 <section class="attendance-overview-container">
   <form method="get" class="attendance-overview-filter">

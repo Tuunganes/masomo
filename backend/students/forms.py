@@ -49,3 +49,9 @@ class CustomAuthForm(AuthenticationForm):
         ),
         "inactive": _("Ce compte est inactif."),
     }
+
+def clean_photo(self):
+    photo = self.cleaned_data.get("photo")
+    if photo and photo.size > 2 * 1024 * 1024:
+        raise forms.ValidationError("Photo must be 2MB or smaller.")
+    return photo
