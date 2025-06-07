@@ -19,33 +19,36 @@ from academics.models import SchoolClass
 def attendance_select(request):
     """
     Let the teacher choose one of their assigned classes and pick a date.
-    On POST, redirect to the same URL with ?class=ID&date=YYYY-MM-DD
+    On POST, redirect to /attendance/mark/?class=ID&date=YYYY-MM-DD
     so that attendance_mark() can pick them up.
     """
-    # Step 0: ensure the logged‐in user actually has an associated Teacher record:
+    # Step 0  ——————————————————————————————————————————————
+    # Make sure the logged-in User actually HAS a Teacher record.
     try:
         teacher = request.user.teacher
     except Teacher.DoesNotExist:
-        # If they are not a Teacher, forbid access.
-        return redirect("students:student_list")  # or HttpResponseForbidden(...) 
+        # If they are not a Teacher we simply bounce them away.
+        return redirect("students:student_list")   # (or HttpResponseForbidden)
 
-    # Determine which classes this teacher can mark (homeroom or subject teacher)
+    # Step 1  ——————————————————————————————————————————————
+    # Which classes may this teacher mark?  (homeroom OR subject teacher)
     eligible_classes = SchoolClass.objects.filter(
         dj_models.Q(main_teacher=teacher) | dj_models.Q(teachers=teacher)
     ).distinct().order_by("name")
 
-
+    # Step 2  ——————————————————————————————————————————————
     if request.method == "POST":
         chosen_class = request.POST.get("school_class")
-        chosen_date = request.POST.get("date")
+        chosen_date  = request.POST.get("date")
         if chosen_class and chosen_date:
-            mark_url = reverse("attendance:attendance_mark")
+            mark_url = reverse("attendance:attendance_mark")  # /attendance/mark/
+            # Jump directly to the mark-view with query-string.
             return redirect(f"{mark_url}?class={chosen_class}&date={chosen_date}")
-            
 
+    # Step 3  ——————————————————————————————————————————————
     return render(request, "attendance_select.html", {
         "classes": eligible_classes,
-        "today":   now().date().isoformat(),  # prefill with today's date
+        "today":   now().date().isoformat(),   # pre-fill date picker with “today”
     })
 
 
@@ -54,66 +57,85 @@ def attendance_select(request):
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_mark(request):
     """
-    Display a formset listing all students in that class; prepopulate any existing
-    Attendance records for the chosen date. On POST, save each form as needed.
+    Show a table of all students in that class; pre-populate any existing rows.
+    On POST, save or update each attendance record.
     """
     class_id = request.GET.get("class")
     date_str = request.GET.get("date")
 
-    # If no class or date selected, send back to selection page
+    # Guard-rail: if user typed URL directly w/out params → send back.
     if not (class_id and date_str):
         return redirect("attendance:attendance_select")
 
     school_class = get_object_or_404(SchoolClass, pk=class_id)
-    teacher = request.user.teacher  # can now safely do this
+    teacher      = request.user.teacher  # safe because view is @login_required
 
-    # Get all students assigned to this class, ordered by last name
+    # ------------------------------------------------------------------ #
+    # 1.  All students that BELONG to this class
+    # ------------------------------------------------------------------ #
     students_in_class = Student.objects.filter(
         school_class=school_class
     ).order_by("last_name", "first_name")
 
-    # Create a formset factory for Attendance
-    AttendanceFormSet = modelformset_factory(
-        Attendance,
-        form=AttendanceForm,
-        extra=0,
-        can_delete=False,
-    )
-
-    # Fetch any existing attendance records for these students on that date
+    # ------------------------------------------------------------------ #
+    # 2.  Existing attendance rows for that date
+    # ------------------------------------------------------------------ #
     existing_qs = Attendance.objects.filter(
         student__in=students_in_class,
         date=date_str
     )
 
+    # ------------------------------------------------------------------ #
+    # 3.  Build a *dynamic* form-set:
+    #     “extra” == how many students still need a fresh row
+    # ------------------------------------------------------------------ #
+    num_missing = students_in_class.count() - existing_qs.count()   # ← NEW
+    AttendanceFormSet = modelformset_factory(
+        Attendance,
+        form       = AttendanceForm,
+        extra      = max(num_missing, 0),    # ← NEW
+        can_delete = False,
+    )
+
+    # ------------------------------------------------------------------ #
+    # 4.  POST: validate & save
+    # ------------------------------------------------------------------ #
     if request.method == "POST":
         formset = AttendanceFormSet(request.POST, queryset=existing_qs)
         if formset.is_valid():
-            instances = formset.save(commit=False)
-            for inst in instances:
-                # If it's a new record (no pk), record which teacher marked it
-                if not inst.pk:
-                    inst.marked_by = teacher
-                inst.save()
-            return redirect(f"{request.path}?class={class_id}&date={date_str}")
+            objs = formset.save(commit=False)
 
+            for obj in objs:
+                # New rows (pk is None) need “marked_by” filled in.
+                if obj.pk is None:
+                    obj.marked_by = teacher
+                obj.save()
+
+            # NOTE: deleted forms are ignored because can_delete=False.
+            # After saving → return to SAME page so teacher sees what they saved.
+            return redirect(request.get_full_path())
+
+    # ------------------------------------------------------------------ #
+    # 5.  GET: build initial data for still-missing students
+    # ------------------------------------------------------------------ #
     else:
-        # Build initial data for any students who don't yet have a record
-        initial_data = []
-        existing_map = {att.student_id: att for att in existing_qs}
-        for student in students_in_class:
-            if student.id not in existing_map:
-                initial_data.append({
-                    "student":   student.pk,
+        initial_rows = []
+        present_ids  = set(existing_qs.values_list("student_id", flat=True))
+
+        for stu in students_in_class:
+            if stu.id not in present_ids:           # need a brand-new row
+                initial_rows.append({
+                    "student":   stu.pk,
                     "date":      date_str,
-                    "status":    "present",
+                    "status":    "present",         # default value
                     "marked_by": teacher.pk,
                 })
 
-        formset = AttendanceFormSet(queryset=existing_qs, initial=initial_data)
+        formset = AttendanceFormSet(queryset=existing_qs, initial=initial_rows)
+
 
     # ------------------------------------------------------------------ #
-    # 6.  Render template
+    #   Render template
     # ------------------------------------------------------------------ #
 
     return render(request, "attendance_mark.html", {
