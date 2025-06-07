@@ -8,28 +8,90 @@
   <div class="form-card">
     <h1>Add New Student</h1>
 
+    {% if messages %}
+      {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
     <form method="POST" enctype="multipart/form-data" class="grid-2" novalidate>
       {% csrf_token %}
       {{ form.non_field_errors }}
 
-      <label>Student&nbsp;ID: {{ form.student_id }}</label>
-      <label>First&nbsp;name: {{ form.first_name }}</label>
-      <label>Last&nbsp;name: {{ form.last_name }}</label>
+      <label>Student ID: {{ form.student_id }}</label>
+      {% if form.student_id.errors %}
+        <div class="error">{{ form.student_id.errors }}</div>
+      {% endif %}
+
+      <label>First name: {{ form.first_name }}</label>
+      {% if form.first_name.errors %}
+        <div class="error">{{ form.first_name.errors }}</div>
+      {% endif %}
+
+      <label>Last name: {{ form.last_name }}</label>
+      {% if form.last_name.errors %}
+        <div class="error">{{ form.last_name.errors }}</div>
+      {% endif %}
+
       <label>Gender: {{ form.gender }}</label>
-      <label>Date&nbsp;of&nbsp;Birth: {{ form.date_of_birth }}</label>
+      {% if form.gender.errors %}
+        <div class="error">{{ form.gender.errors }}</div>
+      {% endif %}
+
+      <label>Date of Birth: {{ form.date_of_birth }}</label>
+      {% if form.date_of_birth.errors %}
+        <div class="error">{{ form.date_of_birth.errors }}</div>
+      {% endif %}
+
       <label>Nationality: {{ form.nationality }}</label>
+      {% if form.nationality.errors %}
+        <div class="error">{{ form.nationality.errors }}</div>
+      {% endif %}
 
       <label class="grid-span-2">Address: {{ form.address }}</label>
+      {% if form.address.errors %}
+        <div class="error">{{ form.address.errors }}</div>
+      {% endif %}
 
       <label>Phone: {{ form.phone }}</label>
-      <label>Email: {{ form.email }}</label>
-      <label>Guardian&nbsp;name: {{ form.guardian_name }}</label>
-      <label>Guardian&nbsp;phone: {{ form.guardian_phone }}</label>
-      <label>Class&nbsp;level: {{ form.school_class }}</label>
-      <label>Enrol&nbsp;date: {{ form.enrol_date }}</label>
-      <label>Status: {{ form.status }}</label>
+      {% if form.phone.errors %}
+        <div class="error">{{ form.phone.errors }}</div>
+      {% endif %}
 
-      <label class="grid-span-2">Photo&nbsp;(jpg/png ≤ 2 MB): {{ form.photo }}</label>
+      <label>Email: {{ form.email }}</label>
+      {% if form.email.errors %}
+        <div class="error">{{ form.email.errors }}</div>
+      {% endif %}
+
+      <label>Guardian name: {{ form.guardian_name }}</label>
+      {% if form.guardian_name.errors %}
+        <div class="error">{{ form.guardian_name.errors }}</div>
+      {% endif %}
+
+      <label>Guardian phone: {{ form.guardian_phone }}</label>
+      {% if form.guardian_phone.errors %}
+        <div class="error">{{ form.guardian_phone.errors }}</div>
+      {% endif %}
+
+      <label>Class level: {{ form.school_class }}</label>
+      {% if form.school_class.errors %}
+        <div class="error">{{ form.school_class.errors }}</div>
+      {% endif %}
+
+      <label>Enrol date: {{ form.enrol_date }}</label>
+      {% if form.enrol_date.errors %}
+        <div class="error">{{ form.enrol_date.errors }}</div>
+      {% endif %}
+
+      <label>Status: {{ form.status }}</label>
+      {% if form.status.errors %}
+        <div class="error">{{ form.status.errors }}</div>
+      {% endif %}
+
+      <label class="grid-span-2">Photo (jpg/png ≤ 2 MB): {{ form.photo }}</label>
+      {% if form.photo.errors %}
+        <div class="error">{{ form.photo.errors }}</div>
+      {% endif %}
 
       <button class="btn-primary grid-span-2">Save</button>
     </form>
