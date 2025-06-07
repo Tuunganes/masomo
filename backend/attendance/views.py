@@ -1,171 +1,171 @@
-from django.shortcuts import render, redirect, get_object_or_404
+# backend/attendance/views.py
+from django.shortcuts          import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_http_methods
-from django.forms import modelformset_factory
-from django.utils.timezone import now
-from django.db import models as dj_models
-from django.urls import reverse 
+from django.views.decorators.http   import require_http_methods
+from django.forms                   import modelformset_factory
+from django.utils.timezone          import now
+from django.db                      import models as dj_models
+from django.urls                    import reverse
 
-from .models import Attendance
-from .forms import AttendanceForm
+from .models        import Attendance
+from .forms         import AttendanceForm
 from students.models import Student
 from teachers.models import Teacher
 from academics.models import SchoolClass
 
 
-# —————— “Select Class & Date” ——————
+# ────────────────────────────────────────────────────────────────
+# 1. “Select Class & Date”
+# ────────────────────────────────────────────────────────────────
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_select(request):
     """
-    Let the teacher choose one of their assigned classes and pick a date.
-    On POST, redirect to /attendance/mark/?class=ID&date=YYYY-MM-DD
-    so that attendance_mark() can pick them up.
+    Teacher chooses one of *their* classes + a date and is then
+    redirected to attendance_mark?class=<id>&date=<yyyy-mm-dd>.
     """
-    # Step 0  ——————————————————————————————————————————————
-    # Make sure the logged-in User actually HAS a Teacher record.
+    # 0️⃣ make sure the user **is** a teacher
     try:
         teacher = request.user.teacher
     except Teacher.DoesNotExist:
-        # If they are not a Teacher we simply bounce them away.
-        return redirect("students:student_list")   # (or HttpResponseForbidden)
+        return redirect("students:student_list")   # 👈 fallback (or Http403)
 
-    # Step 1  ——————————————————————————————————————————————
-    # Which classes may this teacher mark?  (homeroom OR subject teacher)
-    eligible_classes = SchoolClass.objects.filter(
-        dj_models.Q(main_teacher=teacher) | dj_models.Q(teachers=teacher)
-    ).distinct().order_by("name")
+    # 1️⃣ classes the teacher can mark (main-teacher *or* in M2M list)
+    eligible_classes = (
+        SchoolClass.objects
+        .filter(dj_models.Q(main_teacher=teacher) |
+                dj_models.Q(teachers=teacher))
+        .distinct()
+        .order_by("name")
+    )
 
-    # Step 2  ——————————————————————————————————————————————
+    # 2️⃣ handle the POST (user pressed “Next”)
     if request.method == "POST":
         chosen_class = request.POST.get("school_class")
         chosen_date  = request.POST.get("date")
+
         if chosen_class and chosen_date:
-            mark_url = reverse("attendance:attendance_mark")  # /attendance/mark/
-            # Jump directly to the mark-view with query-string.
+            # build the absolute URL of attendance_mark
+            mark_url = reverse("attendance:attendance_mark")
             return redirect(f"{mark_url}?class={chosen_class}&date={chosen_date}")
 
-    # Step 3  ——————————————————————————————————————————————
+    # 3️⃣ initial GET – render simple form
     return render(request, "attendance_select.html", {
         "classes": eligible_classes,
-        "today":   now().date().isoformat(),   # pre-fill date picker with “today”
+        "today":   now().date().isoformat(),
     })
 
 
-# —————— “Mark Attendance” ——————
+# ────────────────────────────────────────────────────────────────
+# 2. “Mark Attendance”
+# ────────────────────────────────────────────────────────────────
 @login_required
 @permission_required("attendance.add_attendance", raise_exception=True)
 def attendance_mark(request):
     """
-    Show a table of all students in that class; pre-populate any existing rows.
-    On POST, save or update each attendance record.
+    Shows a form-set (one row per pupil) and stores / updates the
+    Attendance rows for the selected date in one go.
     """
     class_id = request.GET.get("class")
     date_str = request.GET.get("date")
 
-    # Guard-rail: if user typed URL directly w/out params → send back.
+    # ⛔ if somebody jumps here without params → send them back
     if not (class_id and date_str):
         return redirect("attendance:attendance_select")
 
     school_class = get_object_or_404(SchoolClass, pk=class_id)
-    teacher      = request.user.teacher  # safe because view is @login_required
+    teacher      = request.user.teacher           # safe: already checked above
 
-    # ------------------------------------------------------------------ #
-    # 1.  All students that BELONG to this class
-    # ------------------------------------------------------------------ #
-    students_in_class = Student.objects.filter(
-        school_class=school_class
-    ).order_by("last_name", "first_name")
+    # Pupils in that class (ordered nicely)
+    students_in_class = (
+        Student.objects
+        .filter(school_class=school_class)
+        .order_by("last_name", "first_name")
+    )
 
-    # ------------------------------------------------------------------ #
-    # 2.  Existing attendance rows for that date
-    # ------------------------------------------------------------------ #
+    # The *existing* rows for that date
     existing_qs = Attendance.objects.filter(
         student__in=students_in_class,
         date=date_str
     )
 
-    # ------------------------------------------------------------------ #
-    # 3.  Build a *dynamic* form-set:
-    #     “extra” == how many students still need a fresh row
-    # ------------------------------------------------------------------ #
-    num_missing = students_in_class.count() - existing_qs.count()   # ← NEW
+    # ModelFormSet factory – our “table editor”
     AttendanceFormSet = modelformset_factory(
         Attendance,
-        form       = AttendanceForm,
-        extra      = max(num_missing, 0),    # ← NEW
-        can_delete = False,
+        form        = AttendanceForm,
+        extra       = 0,
+        can_delete  = False,
     )
 
     # ------------------------------------------------------------------ #
-    # 4.  POST: validate & save
+    # 1️⃣ POST → validate & save
     # ------------------------------------------------------------------ #
     if request.method == "POST":
         formset = AttendanceFormSet(request.POST, queryset=existing_qs)
+
         if formset.is_valid():
-
-        # iterate over *every* sub-form (not just those Django thinks “changed”)
+            # iterate over every sub-form (even those Django thinks “unchanged”)
             for f in formset.forms:
-                obj = f.save(commit=False)        # build / update instance
+                obj = f.save(commit=False)            # build / update instance
+                if obj.pk is None:                    # brand-new ➜ stamp teacher
+                    obj.marked_by = teacher
+                obj.save()                            # write to DB
 
-            if obj.pk is None:                # brand-new row ➜ stamp teacher
-                obj.marked_by = teacher
-
-            obj.save()                        # insert / update DB record
-
-        # (no m2m fields, so we don’t need formset.save_m2m())
-        return redirect(request.get_full_path())
+            # success flash is handled in template
+            return redirect(request.get_full_path())  # PRG-pattern ✔️
 
     # ------------------------------------------------------------------ #
-    # 5.  GET: build initial data for still-missing students
+    # 2️⃣ GET (first visit *or* after redirect)
     # ------------------------------------------------------------------ #
     else:
-        initial_rows = []
-        present_ids  = set(existing_qs.values_list("student_id", flat=True))
+        # rows we still have to *create* (so they are visible in the UI)
+        initial_data = []
+        existing_ids = set(existing_qs.values_list("student_id", flat=True))
 
-        for stu in students_in_class:
-            if stu.id not in present_ids:           # need a brand-new row
-                initial_rows.append({
-                    "student":   stu.pk,
+        for s in students_in_class:
+            if s.id not in existing_ids:
+                initial_data.append({
+                    "student":   s.pk,
                     "date":      date_str,
-                    "status":    "present",         # default value
+                    "status":    "present",
                     "marked_by": teacher.pk,
                 })
 
-        formset = AttendanceFormSet(queryset=existing_qs, initial=initial_rows)
-
+        formset = AttendanceFormSet(queryset=existing_qs, initial=initial_data)
 
     # ------------------------------------------------------------------ #
-    #   Render template
+    # 3️⃣ render page
     # ------------------------------------------------------------------ #
-
     return render(request, "attendance_mark.html", {
         "school_class": school_class,
         "date_str":     date_str,
         "formset":      formset,
-        "form_media":   formset.media,  # ensuring Flatpickr JS/CSS get injected
+        "form_media":   formset.media,          # Flatpickr etc.
         "just_saved":   request.method == "POST",
     })
 
 
-# —————— “Admin Overview” ——————
+# ────────────────────────────────────────────────────────────────
+# 3. “Overview”  (for admins / principals)
+# ────────────────────────────────────────────────────────────────
 @login_required
 @permission_required("attendance.view_attendance", raise_exception=True)
 def attendance_overview(request):
     """
-    Show a table of all attendance records, filterable by class and/or date.
+    One big table, filterable by class + date.
     """
-    qs = Attendance.objects.select_related(
-        "student__school_class",
-        "marked_by",
-        "student"
-    ).order_by("-date", "student__last_name")
+    qs = (
+        Attendance.objects
+        .select_related("student__school_class", "marked_by")
+        .order_by("-date", "student__last_name")
+    )
 
-    filter_class = request.GET.get("class")
+    filter_class = request.GET.get("class") or ""
+    filter_date  = request.GET.get("date")  or ""
+
     if filter_class:
         qs = qs.filter(student__school_class_id=filter_class)
 
-    filter_date = request.GET.get("date")
     if filter_date:
         qs = qs.filter(date=filter_date)
 
@@ -174,31 +174,36 @@ def attendance_overview(request):
     return render(request, "attendance_list.html", {
         "records":       qs,
         "class_choices": class_choices,
-        "filter_class":  filter_class or "",
-        "filter_date":   filter_date or "",
+        "filter_class":  filter_class,
+        "filter_date":   filter_date,
         "today":         now().date().isoformat(),
     })
 
 
-# —————— “Edit a single attendance record” ——————
+# ────────────────────────────────────────────────────────────────
+# 4. Edit / Delete (unchanged – just kept for completeness)
+# ────────────────────────────────────────────────────────────────
 @login_required
 @permission_required("attendance.change_attendance", raise_exception=True)
 def attendance_edit(request, pk):
-    rec = get_object_or_404(Attendance, pk=pk)
+    rec  = get_object_or_404(Attendance, pk=pk)
     form = AttendanceForm(request.POST or None, instance=rec)
+
     if request.method == "POST" and form.is_valid():
         form.save()
         return redirect("attendance:attendance_overview")
+
     return render(request, "attendance_edit.html", {"form": form, "obj": rec})
 
 
-# —————— “Delete a single attendance record” ——————
 @login_required
 @permission_required("attendance.delete_attendance", raise_exception=True)
 @require_http_methods(["GET", "POST"])
 def attendance_delete(request, pk):
     rec = get_object_or_404(Attendance, pk=pk)
+
     if request.method == "POST":
         rec.delete()
         return redirect("attendance:attendance_overview")
+
     return render(request, "attendance_delete_confirm.html", {"obj": rec})

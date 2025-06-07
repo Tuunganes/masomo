@@ -41,10 +41,13 @@
        {% endfor %}
      </tbody>
   </table>
+  {% if just_saved %}
+    <p class="alert-success">✓ Attendance saved.</p>
+{% endif %}
 
   <button class="btn-primary" style="margin-top:1rem;">Save</button>
   <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
 </form>
-
+    
 {{ form_media }}   {# Flatpickr + any other media #}
 {% endblock %}
