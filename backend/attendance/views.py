@@ -103,17 +103,18 @@ def attendance_mark(request):
     if request.method == "POST":
         formset = AttendanceFormSet(request.POST, queryset=existing_qs)
         if formset.is_valid():
-            objs = formset.save(commit=False)
 
-            for obj in objs:
-                # New rows (pk is None) need “marked_by” filled in.
-                if obj.pk is None:
-                    obj.marked_by = teacher
-                obj.save()
+        # iterate over *every* sub-form (not just those Django thinks “changed”)
+            for f in formset.forms:
+                obj = f.save(commit=False)        # build / update instance
 
-            # NOTE: deleted forms are ignored because can_delete=False.
-            # After saving → return to SAME page so teacher sees what they saved.
-            return redirect(request.get_full_path())
+            if obj.pk is None:                # brand-new row ➜ stamp teacher
+                obj.marked_by = teacher
+
+            obj.save()                        # insert / update DB record
+
+        # (no m2m fields, so we don’t need formset.save_m2m())
+        return redirect(request.get_full_path())
 
     # ------------------------------------------------------------------ #
     # 5.  GET: build initial data for still-missing students
@@ -143,6 +144,7 @@ def attendance_mark(request):
         "date_str":     date_str,
         "formset":      formset,
         "form_media":   formset.media,  # ensuring Flatpickr JS/CSS get injected
+        "just_saved":   request.method == "POST",
     })
 
 
