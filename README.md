@@ -7,6 +7,13 @@
 
 * **Student CRUD**: Create, Read (List & Detail by slug), Update, and Delete student records via web forms with confirmation prompts.
 
+* **Teacher CRUD**:, user-account binding, photo upload |
+
+* **Academics** : Academic years, classes (main teacher + co-teachers), subjects |
+* **Attendance**: Teacher flow → select class & date → mark each student’s status.<br>• Statuses: Present / Absent / Late / Sick / Temp. excl. / Perm. excl. / Non-payment / Internal excl.<br>• One date-picker per roll (header) — hidden date per row in DB.<br>• Filterable overview; inline edit/delete. |
+
+**Authentication** | Login / logout, custom French error strings, `@permission_required` guards |
+
 * **Slug-based URLs**: Human-readable URLs like /student/alice-smith-somo/ generated automatically for each student.
 
 * **Date Picker**: Integrated django-flatpickr for selecting date of birth with DatePickerInput and validation.
