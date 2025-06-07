@@ -2,42 +2,48 @@
 {% load static %}
 
 {% block title %}Mark Attendance{% endblock %}
-{% block header_title %}Mark Attendance for {{ school_class.name }} on {{ date_str }}{% endblock %}
+{% block header_title %}
+   Mark Attendance for {{ school_class.name }} on {{ date_str }}
+{% endblock %}
 
 {% block content %}
-<section class="attendance-mark-container">
-  <form method="post" class="attendance-mark-form">
-    {% csrf_token %}
-    {{ formset.non_form_errors }}
+<form method="post">
+  {% csrf_token %}
 
-    <table class="attendance-table">
-      <thead>
+  <table class="attendance-table" style="width:100%; border-collapse:collapse;">
+     <thead>
         <tr>
-          <th>Student</th>
-          <th>Status</th>
+           <th style="text-align:left;">Student</th>
+           <th style="text-align:left;">Status</th>
         </tr>
-      </thead>
-      <tbody>
-        {% for form in formset %}
-          <tr>
-            <td>
-              {{ form.student.value|default_if_none:"" }}
-              {{ form.student }}{{ form.student.errors }}
-            </td>
-            <td>
-              {{ form.status }}{{ form.status.errors }}
-            </td>
-          </tr>
-          {{ form.date }}        {# hidden #}
-          {{ form.marked_by }}   {# hidden #}
-        {% endfor %}
-      </tbody>
-    </table>
+     </thead>
 
-    <button type="submit" class="btn-primary">Save</button>
-    <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
-  </form>
-</section>
+     <tbody>
+       {% for subform in formset.forms %}
+           {# ── each sub-form == one student row ── #}
+           <tr>
+              <td>
+                 {{ subform.student }}   {# hidden input #}
+                 {% if subform.instance.pk %}
+                     {{ subform.instance.student.full_name }}
+                 {% else %}
+                     {# new record: use the id stored in initial #}
+                     {% with sid=subform.initial.student %}
+                         {{ sid|get_student_name }}
+                     {% endwith %}
+                 {% endif %}
+              </td>
+              <td>{{ subform.status }}</td>
+           </tr>
+       {% empty %}
+           <tr><td colspan="2">No students are enrolled in this class.</td></tr>
+       {% endfor %}
+     </tbody>
+  </table>
 
-{{ form_media }}  {# ensure the flatpickr CSS/JS for date fields is injected #}
+  <button class="btn-primary" style="margin-top:1rem;">Save</button>
+  <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
+</form>
+
+{{ form_media }}   {# Flatpickr + any other media #}
 {% endblock %}
