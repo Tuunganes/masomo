@@ -112,11 +112,15 @@ def attendance_mark(request):
 
         formset = AttendanceFormSet(queryset=existing_qs, initial=initial_data)
 
+    # ------------------------------------------------------------------ #
+    # 6.  Render template
+    # ------------------------------------------------------------------ #
+
     return render(request, "attendance_mark.html", {
         "school_class": school_class,
         "date_str":     date_str,
         "formset":      formset,
-        "form_media":   formset.media,  # ensure Flatpickr JS/CSS get injected
+        "form_media":   formset.media,  # ensuring Flatpickr JS/CSS get injected
     })
 
 
