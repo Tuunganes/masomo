@@ -39,8 +39,9 @@ def attendance_select(request):
         chosen_class = request.POST.get("school_class")
         chosen_date = request.POST.get("date")
         if chosen_class and chosen_date:
-            url = reverse("attendance:attendance_mark")
-            return redirect(f"{request.path}?class={chosen_class}&date={chosen_date}")
+            mark_url = reverse("attendance:attendance_mark")
+            return redirect(f"{mark_url}?class={chosen_class}&date={chosen_date}")
+            
 
     return render(request, "attendance_select.html", {
         "classes": eligible_classes,

@@ -1,76 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}Attendance Overview{% endblock %}
 {% block header_title %}Attendance Overview{% endblock %}
 
-<p style="margin-bottom:1.2rem;">
-    <a class="btn-primary" href="{% url 'attendance:attendance_select' %}">
-        + New roll
-    </a>
+<p style="margin-bottom:1.2rem">
+  <a class="btn-primary" href="{% url 'attendance:attendance_select' %}">
+    + New roll
+  </a>
 </p>
 
 {% block content %}
 <section class="attendance-overview-container">
-  <form method="get" class="attendance-overview-filter">
-    <div>
-      <label for="class">Class:</label>
-      <select name="class" id="class">
-        <option value="">All classes</option>
-        {% for cls in class_choices %}
-          <option value="{{ cls.id }}"
-            {% if filter_class == cls.id|stringformat:"s" %}selected{% endif %}>
-            {{ cls.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
+  …your filter form…
 
-    <div>
-      <label for="date">Date:</label>
-      <input type="text" name="date" id="date" value="{{ filter_date }}">
-    </div>
-
-    <button type="submit" class="btn-primary">Filter</button>
-  </form>
-
-  <ul class="attendance-list">
-    {% if records %}
-  <table class="attendance-table">
-      <thead>
-        <tr>
-          <th>Date</th><th>Student</th><th>Status</th><th class="text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rec in records %}
-          <tr>
-            <td>{{ rec.date|date:"M j, Y" }}</td>
-            <td>{{ rec.student.full_name }}</td>
-            <td>{{ rec.get_status_display }}</td>
-            <td class="text-right">
-              <a href="{% url 'attendance:attendance_edit' rec.pk %}">✎</a>
-              <a href="{% url 'attendance:attendance_delete' rec.pk %}">🗑</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-  </table>
-{% else %}
-  <p>No attendance records yet.</p>
-{% endif %}
-
-  </ul>
+  {% if records %}
+    <table class="attendance-table">
+      … thead / tbody as in previous reply …
+    </table>
+  {% else %}
+    <p>No attendance records yet.</p>
+  {% endif %}
 </section>
 
-<!-- Flatpickr for the date filter -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    flatpickr("#date", {
-      altFormat: "F j, Y",
-      allowInput: true
-    });
-  });
+  flatpickr("#date",{altFormat:"F j, Y",allowInput:true});
 </script>
 {% endblock %}
