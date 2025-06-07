@@ -9,55 +9,57 @@
 
 {% block content %}
 <form method="post">
-  {% csrf_token %}
+    {% csrf_token %}
+    {{ formset.management_form }}   {# ← render ONCE, before the table #}
 
-  {# ──────────────────────────────────────────────────────────────── #}
-  {#  SHOW non-field (form-set) errors so we know why it failed  ★★   #}
-  {# ──────────────────────────────────────────────────────────────── #}
-  {% if formset.non_form_errors %}
-      <p class="alert-error">
-          {{ formset.non_form_errors }}
-      </p>
-  {% endif %}
+    {# show form-set errors if any #}
+    {% if formset.non_form_errors %}
+        <p class="alert-error">{{ formset.non_form_errors }}</p>
+    {% endif %}
 
-  <table class="attendance-table" style="width:100%; border-collapse:collapse;">
-     <thead>
-        <tr>
-           <th style="text-align:left;">Student</th>
-           <th style="text-align:left;">Status</th>
-        </tr>
-     </thead>
+    <table class="attendance-table" style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr>
+                <th style="text-align:left;">Student</th>
+                <th style="text-align:left;">Status</th>
+            </tr>
+        </thead>
 
-     <tbody>
-       {% for subform in formset.forms %}
-           <tr>
-              <td>
-                 {{ subform.student }}      {# hidden input #}
-                 {% if subform.instance.pk %}
-                     {{ subform.instance.student.full_name }}
-                 {% else %}
-                     {% with sid=subform.initial.student %}
-                         {{ sid|get_student_name }}
-                     {% endwith %}
-                 {% endif %}
-                 {# show per-row errors (if any) ★★ #}
-                 {{ subform.non_field_errors }}
-              </td>
-              <td>{{ subform.status }}</td>
-           </tr>
-       {% empty %}
-           <tr><td colspan="2">No students are enrolled in this class.</td></tr>
-       {% endfor %}
-     </tbody>
-  </table>
+        <tbody>
+        {% for subform in formset.forms %}
+            <tr>
+                <td>
+                    {# hidden widgets every sub-form needs #}
+                    {{ subform.id }}          {# pk (blank for new rows) #}
+                    {{ subform.student }}     {# FK, hidden by Meta      #}
+                    {{ subform.date }}        {# date, hidden by Meta    #}
+                    {{ subform.marked_by }}   {# teacher, hidden by Meta #}
 
-  {# success banner only when we *really* saved ★★ #}
-  {% if just_saved %}
-      <p class="alert-success">✓ Attendance saved.</p>
-  {% endif %}
+                    {# human-readable name #}
+                    {% if subform.instance.pk %}
+                        {{ subform.instance.student.full_name }}
+                    {% else %}
+                        {% with sid=subform.initial.student %}
+                            {{ sid|get_student_name }}
+                        {% endwith %}
+                    {% endif %}
 
-  <button class="btn-primary" style="margin-top:1rem;">Save</button>
-  <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
+                    {{ subform.non_field_errors }}
+                </td>
+                <td>{{ subform.status }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="2">No students are enrolled in this class.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if just_saved %}
+        <p class="alert-success">✓ Attendance saved.</p>
+    {% endif %}
+
+    <button class="btn-primary" style="margin-top:1rem;">Save</button>
+    <a href="{% url 'attendance:attendance_select' %}" class="btn-link">Back</a>
 </form>
 
 {{ form_media }}   {# Flatpickr + any other media #}
