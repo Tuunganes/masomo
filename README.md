@@ -70,6 +70,8 @@
    python manage.py migrate
    python manage.py makemigrations teachers
    python manage.py makemigrations students
+   python manage.py makemigrations academics
+   python manage.py makemigrations attendance
    python manage.py migrate
 
    ```
@@ -133,6 +135,7 @@ Masomo/
 │   │           ├── subject_edit.html
 │   │           └── subject_delete_confirm.html
 │   ├── attendance/                 # Attendance tracking
+│   │   ├── __init__.py
 │   │   ├── admin.py
 │   │   ├── apps.py
 │   │   ├── forms.py
@@ -149,6 +152,10 @@ Masomo/
 │   │           └── attendance_select.html
 │   │           └── attendance_delete_confirm.html
 │   │           └── attendance_edit.html
+│   │   └── templatetags/
+│   │       └── attendance/
+│   │           ├── __init__.py
+│   │           ├── attendance_extras.py
 │   ├── students/                   # Student management
 │   │   ├── admin.py
 │   │   ├── apps.py
