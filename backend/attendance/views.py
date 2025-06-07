@@ -77,7 +77,7 @@ def attendance_mark(request):
     teacher      = request.user.teacher           # safe: already checked above
 
     # Pupils in that class (ordered nicely)
-    # ────────── replace this single line (in attendance_mark) ──────────
+    
     students_in_class = Student.objects.filter(school_class_id=class_id)\
                                    .order_by("last_name", "first_name")
 
